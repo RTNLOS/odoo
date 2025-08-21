@@ -1,0 +1,196 @@
+<odoo>
+  <data>
+
+    <record id="paperformat_dispatch_waybill" model="report.paperformat">
+        <field name="name">Dispatch Waybill Format</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">15</field>
+        <field name="margin_bottom">15</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="dpi">96</field>
+    </record>
+
+    <record id="print_dispatch_waybill_report" model="ir.actions.report">
+        <field name="name">WayBill - Dispatch</field>
+        <field name="model">stock.picking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">warehousing_system.dispatch_waybill_print_report_template</field>
+        <field name="report_file">warehousing_system.dispatch_waybill_print_report_template</field>
+        <field name="print_report_name">'Dispatch WayBill for - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="warehousing_system.paperformat_dispatch_waybill"/>
+    </record>
+
+    <template id="dispatch_waybill_print_report_template">
+        <t t-call="web.basic_layout">
+            <t t-foreach="docs" t-as="o">
+                <div class="page">
+                    <style>
+                        body { font-family: Arial, sans-serif; }
+                        
+                        /* Header and general content styling */
+                        .custom-header { display: table; width: 100%; margin-bottom: 20px; }
+                        .header-left { display: table-cell; width: 60%; vertical-align:top; }
+                        .header-right { display: table-cell; width: 40%; text-align: right; vertical-align:top; }
+                        .company-info { font-size: 0.9rem; line-height: 1.3; }
+                        .logo { max-height: 60px; }
+                        .dispatch-banner { background-color: #c00 !important; color: white !important; padding: 8px 10px; margin-bottom: 5px; display:table; width:100%; }
+                        .dispatch-left, .dispatch-right { display:table-cell; vertical-align:middle; }
+                        .dispatch-left { width:70%; }
+                        .dispatch-right { text-align:right; }
+                        .banner-title { font-size: 1rem; font-weight: bold; }
+                        .customer-name { font-size: 0.9rem; margin-top: 2px; }
+                        .dispatch-right h3 { font-size: 1.3rem; margin: 0; font-weight: bold; }
+                        .order-size-section { margin-bottom: 10px; font-weight: bold; font-size: 0.7rem; }
+
+                        .details-container {
+                            display: table;
+                            width: 100%;
+                            table-layout: fixed;
+                            border-spacing: 10px 0;
+                            margin-bottom: 15px;
+                        }
+                        .details-column {
+                            display: table-cell;
+                            vertical-align: top;
+                            border: 1px solid #ddd;
+                        }
+                        .detail-box-table {
+                            width: 100%;
+                            height: 100%;
+                            border-collapse: collapse;
+                            table-layout: fixed; /* FIX: Force table to respect column widths */
+                        }
+                        .detail-box-table, .detail-box-table * {
+                            border: none !important;
+                        }
+                        .detail-box-table th {
+                            background-color: #c00 !important;
+                            color: white !important;
+                            font-size: 1rem;
+                            font-weight: normal;
+                            padding: 5px 10px;
+                            text-align: left;
+                        }
+                        .detail-box-table td {
+                            font-size: 0.7rem;
+                            padding: 4px 8px;
+                            vertical-align: top;
+                            word-wrap: break-word; /* Allow long words to break */
+                            word-break: break-all; /* FIX: Force breaks for very long unbreakable strings */
+                        }
+                        .detail-box-table td:first-child {
+                            font-weight: bold;
+                            width: 40%;
+                        }
+                        
+                        /* Main item table styling */
+                        .item-details-header { background-color: #c00 !important; color: white !important; font-size: 1rem; padding: 5px 10px; margin: 15px 0 0 0; }
+                        .inventory-table { width: 100%; border-collapse: collapse; }
+                        .inventory-table thead { display: table-header-group !important; }
+                        .inventory-table tfoot { display: table-footer-group !important; }
+                        .inventory-table tbody tr { page-break-inside: avoid !important; }
+                        .inventory-table th { background-color: #f0f0f0 !important; text-align: center; font-size: 0.7rem; padding: 5px; border: 1px solid #ddd; }
+                        .inventory-table td { font-size: 0.7rem; padding: 4px; border: 1px solid #ddd; word-wrap: break-word; }
+                        .inventory-table tfoot td {
+                            border: 1px solid white !important;
+                            padding: 0 !important;
+                        }
+                        
+                        /* Polished Footer and Signature Box styling */
+                        .signature-box-container { padding-top: 25px; }
+                        .signature-box { width: 45%; border: 1px solid #ddd; }
+                        .signature-box h3 { font-size: 0.9rem; padding: 4px 8px; margin: 0; background-color: #c00 !important; color: white !important; font-weight: bold; }
+                        .signature-table { width: 100%; }
+                        .signature-table td { border: none !important; font-size: 0.8rem; padding: 8px; vertical-align: middle; }
+                        .signature-table td:first-child { font-weight: normal !important; width: 40%; }
+                        .signature-table td:last-child { border-bottom: 1px solid #888; height: 25px; }
+                    </style>
+
+                    <header class="custom-header">
+                        <div class="header-left"><div class="company-info"><strong><t t-esc="o.company_id.name"/></strong><br/><t t-esc="o.company_id.street"/><br/><t t-if="o.company_id.street2"><t t-esc="o.company_id.street2"/><br/></t><t t-esc="o.company_id.city"/>, <t t-if="o.company_id.state_id"><t t-esc="o.company_id.state_id.name"/></t><br/><t t-if="o.company_id.country_id"><t t-esc="o.company_id.country_id.name"/></t></div></div>
+                        <div class="header-right"><img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" class="logo"/></div>
+                    </header>
+                    <div class="dispatch-banner"><div class="dispatch-left"><div class="banner-title"><t t-esc="o.warehouse_id.name"/> - Dispatch Order List</div><div class="customer-name"><t t-esc="o.partner_id.name"/></div></div><div class="dispatch-right"><h3><t t-esc="o.name"/></h3></div></div>
+                    <div class="order-size-section"><div style="display: table; width: 100%;"><div style="display: table-cell;">Order size: <t t-esc="len(o.move_ids_without_package)"/> Item(s)</div><div style="display: table-cell; text-align: right;">Printed by: <t t-esc="user.name"/> on <span t-esc="datetime.datetime.now().strftime('%d-%b-%Y %H:%M')"/></div></div></div>
+
+                    <div class="details-container">
+                        <div class="details-column">
+                            <table class="detail-box-table">
+                                <thead><tr><th colspan="2">Order Details</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Our Order Number:</td><td><b><t t-esc="o.name"/></b></td></tr>
+                                    <tr><td>Customer:</td><td><b><t t-esc="o.customer_id.name"/></b></td></tr>
+                                    <tr><td>Delivery Address:</td><td><t t-esc="o.customer_address"/></td></tr>
+                                    <tr><td>Phone No.:</td><td><t t-esc="o.customer_id.phone or ''"/></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="details-column">
+                             <table class="detail-box-table">
+                                <thead><tr><th colspan="2">Transport Details</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Truck Company:</td><td><t t-esc="o.truck_company_name.name or ''"/></td></tr>
+                                    <tr><td>Truck Reg. No.:</td><td><t t-esc="o.truck_reg or ''"/></td></tr>
+                                    <tr><td>Truck Type:</td><td><t t-esc="o.truck_type or ''"/></td></tr>
+                                    <tr><td>Driver Name:</td><td><t t-esc="o.truck_driver.name or ''"/></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <h3 class="item-details-header">Item Details</h3>
+                    <table class="inventory-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;">#</th>
+                                <th style="width: 12%;">W/H File No.</th>
+                                <th style="width: 35%;">Description</th>
+                                <th style="width: 8%;">Quantity</th>
+                                <th style="width: 8%;">UoM</th>
+                                <th style="width: 15%;">Customer PO</th>
+                                <th style="width: 17%;">Date Received</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="o.move_ids_without_package" t-as="line">
+                                <tr>
+                                    <td><span t-esc="line_index + 1"/></td>
+                                    <td><span t-esc="o.name + '-' + str(line.id)"/></td>
+                                    <td><span t-esc="line.product_id.name"/> </td>
+                                    <td style="text-align: right;"><span t-esc="line.product_uom_qty"/></td>
+                                    <td><span t-esc="line.product_uom.name"/></td>
+                                    <td><span t-esc="o.origin or ''"/></td>
+                                    <td><span t-esc="line.date.strftime('%d-%b-%Y')"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="7">
+                                    <div class="signature-box-container">
+                                        <div class="signature-box">
+                                            <h3>Signature Box</h3>
+                                            <table class="signature-table">
+                                                <tr><td>Receiver's Name:</td><td>&#160;</td></tr>
+                                                <tr><td>Date/Time:</td><td>&#160;</td></tr>
+                                                <tr><td>Signature:</td><td>&#160;</td></tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+  </data>
+</odoo>

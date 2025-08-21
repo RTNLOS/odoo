@@ -1,0 +1,38 @@
+<!-- in views/financial_file_views.xml -->
+<odoo>
+    <record id="view_financial_file_tree" model="ir.ui.view">
+      <field name="name">purchase.order.financial.tree</field>
+      <field name="model">purchase.order</field>
+      <field name="arch" type="xml">
+        <tree string="Select Financial File">
+            <field name="name"/>
+            <field name="partner_id"/>
+            <field name="partner_ref" string="Vendor PO#"/>
+            <field name="date_order" string="Order Date"/>
+            <field name="company_id"/>
+          </tree>
+      </field>
+    </record>
+  
+    <record id="view_financial_file_form" model="ir.ui.view">
+      <field name="name">purchase.order.financial.form</field>
+      <field name="model">purchase.order</field>
+      <field name="arch" type="xml">
+        <form string="Financial File">
+            <sheet>
+              <group>
+                <field name="company_id"/>
+                <field name="partner_id" string="Vendor"/>
+                <field name="partner_ref" string="Vendor PO#"/>
+              </group>
+              <group>
+                <field name="date_order" string="Order Date"/>
+                <!-- if you need “Expected Month” you must add a custom date field on purchase.order -->
+                <field name="date_planned" string="Expected Month"/>
+              </group>
+            </sheet>
+          </form>
+      </field>
+    </record>
+  </odoo>
+  

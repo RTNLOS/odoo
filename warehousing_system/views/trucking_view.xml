@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+ <record id="view_partner_form_inherit_trucking_inline" model="ir.ui.view">
+      <field name="name">res.partner.form.inherit.trucking.inline</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_partner_form"/>
+      <field name="arch" type="xml">
+        
+        <xpath expr="//sheet/group/group/span[@name='address_name']" position="before">
+          <field name="is_trucking_company"
+                 class="o_inline"
+                 string="Trucking Company?"
+                 />
+          <field name="truck_reg_no"
+                 class="o_inline"
+                 invisible="not is_trucking_company"
+                 placeholder="Reg. No."
+                 />
+        </xpath>
+      </field>
+    </record>
+</odoo>

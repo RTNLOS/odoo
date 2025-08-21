@@ -1,0 +1,355 @@
+/* Base Layout */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Warehouse Dashboard Container */
+.warehouse-dashboard-container {
+    position: relative;
+    height: 100vh;
+    background-color: #f8f9fa;
+    overflow: hidden;
+}
+
+.warehouse-dashboard-container .container-fluid {
+  max-width: 1200px;
+  margin: auto;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Dashboard Content */
+.dashboard-content {
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+}
+
+.dashboard-content .container-fluid {
+    height: 100%;
+    overflow-y: auto;
+    max-width: 1200px;
+    margin: auto;
+    padding: 0.5rem 1.5rem 1.5rem;
+}
+
+.dashboard-cards {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.75rem;
+  padding-bottom: 1.5rem;
+}
+
+.col-card {
+  flex: 0 0 288px;
+  max-width: 288px;
+  padding: 0.75rem;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.warehouse-card {
+  background-color: #f8dada;
+  border: 1px solid #f1c3c3;
+  border-radius: 8px;
+  padding: 0.8rem;
+  height: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+
+.blue-card {
+  background-color: #e8f4fd;
+  border: 1px solid #b3d9f7;
+}
+
+.blue-card .card-icon {
+  color: #2980b9;
+}
+
+.blue-card .card-count {
+  color: #2980b9;
+}
+
+.blue-card .card-title {
+  color: #1e5a8a;
+}
+
+.blue-card:hover {
+  background-color: #d4edfa;
+}
+
+.warehouse-card.blue-card .card-icon {
+  color: #2980b9 !important;
+}
+.warehouse-card.blue-card .card-count {
+  color: #2980b9 !important;
+}
+.warehouse-card.blue-card .card-title {
+  color: #1e5a8a !important;
+}
+.warehouse-card.blue-card {
+  background-color: #e8f4fd !important;
+  border: 1px solid #b3d9f7 !important;
+}
+.warehouse-card.blue-card:hover {
+  background-color: #d4edfa !important;
+}
+
+.warehouse-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.warehouse-card .card-icon {
+  font-size: 1.5rem;
+  color: #c02c2c;
+  position: absolute;
+  top: 0.8rem;
+  left: 0.8rem;
+  pointer-events: none;
+}
+
+.card-icon .fa-stack {
+  font-size: 0.75rem;
+  vertical-align: top;
+}
+
+.card-icon-img {
+  display: block;
+  width: 1.75rem;
+  height: 1.75rem;
+  object-fit: contain;
+  margin: 0 auto;
+}
+
+.card-icon-img.large {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+.card-icon {
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-icon svg {
+  display: block;
+  width: 1.5rem;
+  height: 1.5rem;
+  object-fit: contain;
+  margin: 0 auto;
+}
+
+.warehouse-card .card-count {
+  font-size: 1.6rem; 
+  font-weight: bold;
+  color: #c02c2c;
+  text-align: center;
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem;
+}
+
+.warehouse-card .card-title {
+  font-size: 0.8rem;
+  color: #9a2222;
+  text-align: center;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+  padding: 0 0.3rem;
+  line-height: 1.2; 
+}
+
+.dashboard-filters {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+.dashboard-filters label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.dashboard-filters .form-control {
+    border: 2px solid #ecf0f1;
+    border-radius: 8px;
+    padding: 10px 15px;
+    transition: border-color 0.3s ease;
+}
+
+.dashboard-filters .form-control:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+}
+
+.breadcrumb {
+    background: transparent !important;
+    padding: 0;
+    margin: 0;
+}
+
+/* Logo Section Styles - UPDATED FOR DUAL LOGOS */
+.logo-section {
+    margin-bottom: 20px;
+    margin-top: 8px;
+    text-align: left;
+    padding: 0 2rem;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.logo-image {
+    /* height: 4.5rem; */
+    /* width: auto; */
+    max-width: 280px;
+    object-fit: contain;
+    vertical-align: middle;
+    display: block;
+}
+
+.app-logo {
+    /* Application logo specific styles - LEFT SIDE */
+    height: 6rem;
+    width: auto;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 8px;
+    background: white;
+    order: 1;
+}
+
+.company-logo {
+    height: 4.5rem;
+    width: auto;
+    border: none;
+    border-radius: 8px;
+    padding: 8px;
+    background: white;
+    box-shadow: none;
+    order: 2;
+}
+
+/* Media Queries */
+@media (max-width: 1200px) {
+  .col-card {
+    flex: 0 0 calc(25% - 1rem);
+    max-width: calc(25% - 1rem);
+  }
+}
+
+@media (max-width: 992px) {
+  .col-card {
+    flex: 0 0 calc(33.333% - 1rem);
+    max-width: calc(33.333% - 1rem);
+  }
+}
+
+@media (max-width: 768px) {
+    .dashboard-filters .row {
+        flex-direction: column;
+    }
+
+    .dashboard-filters .col {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .col-card {
+        flex: 0 0 calc(50% - 1rem);
+        max-width: calc(50% - 1rem);
+    }
+
+    .logo-section {
+        text-align: center;
+        padding: 0 1rem;
+    }
+
+    .logo-container {
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .app-logo,
+    .company-logo {
+        order: unset;
+    }
+
+    .logo-image {
+        height: 4rem;
+        width: auto;
+        max-width: 260px;
+    }
+
+    .dashboard-content .container-fluid {
+        padding: 0.1rem 1.5rem 1.5rem;
+    }
+
+    .logo-section {
+        margin-bottom: 15px;
+        margin-top: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-content .container-fluid {
+        padding: 0.1rem 15px 15px;
+    }
+
+    .dashboard-filters .row {
+        gap: 10px;
+    }
+
+    .col-card {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .warehouse-card {
+        height: 100px;
+    }
+
+    .warehouse-card .card-count {
+        font-size: 1.4rem;
+    }
+
+    .warehouse-card .card-title {
+        font-size: 0.75rem;
+    }
+
+    .logo-container {
+        gap: 12px;
+    }
+
+    .logo-image {
+        height: 3.5rem;
+        max-width: 200px;
+    }
+
+    .logo-section {
+        margin-bottom: 12px;
+        margin-top: 3px;
+    }
+}

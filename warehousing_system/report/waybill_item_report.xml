@@ -1,0 +1,142 @@
+<odoo>
+  <data> 
+
+    <record id="paperformat_waybill_item_label" model="report.paperformat">
+        <field name="name">Item Label Format</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="dpi">96</field>
+    </record>
+
+    <record id="print_waybill_item_report" model="ir.actions.report">
+        <field name="name">Label</field>
+        <field name="model">stock.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">warehousing_system.waybill_item_print_report_template</field>
+        <field name="report_file">warehousing_system.waybill_item_print_report_template</field>
+        <field name="print_report_name">'WayBill Item - %s' % (object.picking_id.name)</field>
+        <field name="binding_model_id" ref="stock.model_stock_move"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="warehousing_system.paperformat_waybill_item_label"/>
+    </record>
+    
+    <template id="waybill_item_print_report_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-foreach="o.move_line_ids" t-as="line">
+                    <t t-call="warehousing_system.waybill_item_print_template">
+                        <t t-set="move" t-value="o"/>
+                        <t t-set="move_line" t-value="line"/>
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+    
+    <template id="waybill_item_print_template">
+        <t t-call="web.basic_layout">
+            <div class="page">
+                <style>
+                    .label-container { margin: auto; font-family: Arial, sans-serif; color: #333; }
+                    .custom-header { display: table; width: 100%; padding-bottom: 10px; margin-bottom: 10px;}
+                    .header-left { display: table-cell; width: 60%; vertical-align: top; }
+                    .header-right { display: table-cell; width: 40%; text-align: right; vertical-align: top; }
+                    .company-info { font-size: 0.9rem; line-height: 1.3; }
+                    .logo { max-height: 80px; }
+                    .title-block { text-align: center; margin: 20px 0; }
+                    .title-block h2 { font-size: 24px; margin: 0; font-weight: bold; line-height: 1.2; }
+                    .title-block h3 { font-size: 16px; margin: 10px 0; font-weight: normal; }
+                    .qr-code { width: 150px; height: 150px; margin: 10px auto; display: block; }
+                    .item-details-section {
+                        border-top: 1px solid #ddd;
+                        padding-top: 10px;
+                        margin-top: 20px;
+                    }
+                    .item-details-section h4 {
+                        text-align: center;
+                        margin-top: 0;
+                        margin-bottom: 10px;
+                        font-weight: normal;
+                    }
+                    .details-table { width: 100%; border-collapse: collapse; }
+                    .details-table td { border: 1px solid #ccc; padding: 5px 8px; font-size: 0.9rem; }
+                    .details-table td:first-child { font-weight: bold; width: 35%; }
+                    .storage-section { text-align: center; margin-top: 25px; }
+                    .storage-section p { margin: 0; font-size: 1rem; }
+                    .storage-section h2 { margin: 5px 0; font-size: 28px; font-weight: bold; }
+                </style>
+
+                <div class="label-container">
+                    <header class="custom-header">
+                        <div class="header-left">
+                            <div class="company-info">
+                                <span t-esc="move.company_id.name"/><br/>
+                                <span t-esc="move.company_id.street"/><br/>
+                                <t t-if="move.company_id.street2"><span t-esc="move.company_id.street2"/><br/></t>
+                                <span t-esc="move.company_id.city"/>, <t t-if="move.company_id.state_id"><span t-esc="move.company_id.state_id.name"/></t><br/>
+                                <t t-if="move.company_id.country_id"><span t-esc="move.company_id.country_id.name"/></t>
+                            </div>
+                        </div>
+                        <div class="header-right">
+                            <img t-if="move.company_id.logo" t-att-src="image_data_uri(move.company_id.logo)" class="logo"/>
+                        </div>
+                    </header>
+
+                    <div class="title-block">
+                        <t t-set="partner" t-value="move.restrict_partner_id or move.picking_id.partner_id"/>
+                        <t t-if="partner">
+                            <h2 t-if="partner.parent_id" t-esc="partner.parent_id.name"/>
+                            <h2 t-esc="partner.name"/>
+                        </t>
+                        
+                        <h2 t-esc="move.picking_id.intended_vessel or ''"/>
+                        <h3 t-esc="move.picking_id.financial_id.code or ''"/>
+                        <img class="qr-code" t-att-src="'data:image/png;base64,' + move.generate_location_specific_qr_code(move_line)"/>
+                    </div>
+
+                    <div class="item-details-section">
+                        <h4>Item Details</h4>
+                        <table class="details-table">
+                            <tr><td>Item Description:</td><td><span t-field="move.product_id.name"/></td></tr>
+                            <tr><td>Criticality Level:</td><td><span t-esc="move.item_classification_critical and 'Critical' or 'Non Critical'"/></td></tr>
+                            <tr><td>Temperature Sensitive:</td><td><span t-esc="move.item_classification_temperature and 'Temperaure Sensitive' or 'Non-Temperature Sensitive'"/></td></tr>
+                            <tr><td>Dangerous:</td><td><span t-esc="move.item_classification_dangerous and 'Yes' or 'No'"/> 
+                                <t t-if="move.item_classification_dangerous and move.dangerous_goods_class">
+                                    (<span t-esc="dict(move._fields['dangerous_goods_class'].selection).get(move.dangerous_goods_class)"/>)
+                                </t>
+                            </td></tr>
+                            <tr><td>Weight (Kg):</td><td><span t-field="line.weight_per_item"/></td></tr>
+                            <tr><td>Unit:</td><td><span t-field="move.product_uom.name"/></td></tr>
+                            <tr><td>Related Inbound Shipment#:</td><td><span t-field="move.picking_id.financial_id.code"/></td></tr>
+                            <tr>
+                                <td>Arrival Date/Time:</td>
+                                <td>
+                                    <t t-if="move.picking_id.actual_date_of_arrival">
+                                        <span t-esc="move.picking_id.actual_date_of_arrival.strftime('%d-%b-%Y')"/>
+                                    </t>
+                                </td>
+                            </tr>
+                            <tr><td>Supplier PO Number:</td><td><span t-field="move.po_number_supplier"/></td></tr>
+                            <tr><td>Customer PO Number:</td><td><span t-field="move.picking_id.bl_awb_number"/></td></tr>
+                            <tr><td>Our File Number:</td><td><span t-field="move.picking_id.name"/></td></tr>
+                        </table>
+                    </div>
+
+                    <div class="storage-section">
+                        <p>Allocated Storage Section:</p>
+                        <h2><span t-field="move_line.location_dest_id.name"/></h2>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+  </data>
+</odoo>

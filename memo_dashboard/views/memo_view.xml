@@ -1,0 +1,18 @@
+<odoo>
+    <data>
+        <!-- <record id="menu_portal_my_requests_dashboard" model="website.menu">
+            <field name="name">My Dashboard</field>
+            <field name="url">/my-dashboard</field>
+            <field name="parent_id" ref="company_memo.menu_portal_request_applications" />
+            <field name="website_id" ref="website.default_website" />
+            <field name="sequence" type="int">3</field>
+        </record> -->
+        <record model="ir.actions.act_window" id="internal_memo_model_dashboard_action">
+            <field name="name">Dashboard (Memo)</field>
+            <field name="res_model">memo.model</field>
+            <field name="type">ir.actions.act_window</field>
+           <field name="domain">[]</field>
+             <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

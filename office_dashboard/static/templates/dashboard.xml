@@ -1,0 +1,1633 @@
+<odoo>
+	<data>
+		<template id="theme_frontend_footer" inherit_id="web.frontend_layout">
+			<xpath expr="//div[hasclass('o_footer_copyright')]" position="replace">
+			</xpath>
+		</template>
+		<template name="office_dashboard_template" id="office_dashboard_template_id">
+			<t t-call="website.layout">
+				<!-- <div class="office-dashboard g-sidenav-show bg-gray-100" id="office-dashboard-content"> -->
+				<div class="office-ds-nav g-sidenav-show" id="office-dashboard-content">
+					<!-- <main class="office-dashboard-main-content position-relative max-height-vh-100 h-100 border-radius-lg "> -->
+						<div class="topbar">
+							<nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
+								<div class="container-fluid py-1 px-3">
+								
+									<!-- <nav aria-label="breadcrumb">
+										<ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+											<i id="opennavbtn" class="opennavbtn fa fa-bars text-lg opacity-10" aria-hidden="true"></i> 
+											<i id="closenavbtn" class="closenavbtn closeSb fa fa-bars text-lg opacity-10 d-none" aria-hidden="true"></i> 
+										</ol>
+									</nav> -->
+									<div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-2" id="navbar">
+										<div class="ms-md-auto pe-md-3 d-flex align-items-left ">
+											<div class="input-group">
+												<span class="input-group-text text-body searchdashboardbtn"><i class="fa fa-search" aria-hidden="true"></i></span>
+												<input type="text" id="searchdashboard_val" class="form-control" placeholder="Search here..."/>
+												<input type="hidden" id="dashboard_view_text" class="form-control"/>
+											</div>
+											<!-- <div class="input-group">
+												<span class="input-group-text text-body">Type</span>
+												<select name="memotypedashboard" id="memotypedashboard" required="required" data-init="" class="form-control" labelfor="Type">
+													<option disabled="true" selected="true" value="">..</option>
+													<t t-foreach="memo_types" t-as="key">
+														<option t-att-value="key.name">
+															<span t-esc="key.name"/>
+														</option>
+													</t>
+												</select>
+											</div> -->
+											<div class="input-group frame">
+												<span class="input-group-text text-body">FR</span>
+												<select name="memoFRFilter" id="memoFRFilter" data-init="" class="form-control" labelfor="FR">
+													<option value="">All</option> 
+													<t t-foreach="frame_agreement_ids" t-as="key">
+														<option t-att-value="key.id">
+															<span t-esc="key.code"/> - <span t-esc="key.name"/>
+														</option>
+													</t>
+												</select>
+											</div>
+											
+											<div class="input-group customer">
+												<span class="input-group-text text-body">Client</span>
+												<select name="memoCustomerFilter" id="memoCustomerFilter" data-init="" class="form-control" labelfor="Customer">
+													<option value="">All</option>
+													<t t-foreach="memo_filters.get('customer_ids')" t-as="key">
+														<option t-att-value="key.get('id')">
+															<span t-esc="key.get('name')"/>
+														</option>
+													</t>
+												</select>
+											</div>
+											<div class="input-group">
+												<span class="input-group-text text-body">Project</span>
+												<select name="memoProjectFilter" id="memoProjectFilter" data-init="" class="form-control" labelfor="Project">
+													<option value="">All</option>
+													<t t-foreach="memo_filters.get('project_ids')" t-as="key">
+														<option t-att-value="key.get('id')">
+															<span t-esc="key.get('name')"/>
+														</option>
+													</t>
+												</select>
+											</div>
+											<div class="input-group">
+												<span class="input-group-text text-body">File type</span>
+												<select name="memoProjecttypeFilter" id="memoProjecttypeFilter" data-init="" class="form-control" labelfor="Project">
+													<option value=""></option>
+													<option value="cfwd">CFWD</option>
+													<option value="agency">Agency</option>
+													<option value="travel">Travel</option>
+													<option value="transport">Transport</option>
+													<option value="warehouse">Warehouse</option>
+													<option value="procurement">Procurement</option>
+													<option value="all">All</option>
+													<!-- ['warehouse', 'procurement', 'agency', 'cfwd', 'transport', 'travel'] -->
+													<!-- <t t-foreach="memo_filters.get('project_ids')" t-as="key">
+														<option t-att-value="key.get('id')">
+															<span t-esc="key.get('name')"/>
+														</option>
+													</t> -->
+												</select>
+											</div>
+											<div class="input-group">
+												<span class="input-group-text text-body">Month</span>
+												<select name="memoMonthFilter" id="memoMonthFilter" data-init="" class="form-control" labelfor="Month">
+													<option value=""></option> 
+													<option value="Jan">Jan</option> 
+													<option value="Feb">Feb</option> 
+													<option value="Mar">Mar</option> 
+													<option value="Apr">Apr</option> 
+													<option value="May">May</option> 
+													<option value="Jun">Jun</option> 
+													<option value="Jul">Jul</option> 
+													<option value="Aug">Aug</option> 
+													<option value="Sep">Sep</option> 
+													<option value="Oct">Oct</option> 
+													<option value="Nov">Nov</option> 
+													<option value="Dec">Dec</option> 
+													<!-- <t t-foreach="memo_filters.get('month_ids')" t-as="key">
+														<option t-att-value="key">
+															<span t-esc="key"/>
+														</option>
+													</t> -->
+												</select>
+											</div>
+											<div class="input-group">
+												<span class="input-group-text text-body">Year</span>
+												<select name="memoYearFilter" id="memoYearFilter" data-init="" class="form-control" labelfor="Year">
+													<option value=""></option> 
+													<t t-foreach="memo_filters.get('year_ids')" t-as="key">
+														<option t-att-value="key">
+															<span t-esc="key"/>
+														</option>
+													</t>
+												</select>
+											</div>
+											<div class="input-group">
+												<span class="input-group-text text-body">Company</span>
+												<select name="memoBranchFilter" id="memoBranchFilter" data-init="" class="form-control" labelfor="Year">
+													<option value="">All</option> 
+													<t t-foreach="memo_filters.get('company_ids')" t-as="key">
+														<option t-att-value="key.get('id')">
+															<span t-esc="key.get('name')"/>
+														</option>
+													</t>
+												</select>
+											</div>
+										</div>
+										<ul class="navbar-nav justify-content-end">
+											<li class="nav-item d-flex align-items-center">
+												<a class="btn btn-sm mb-0 me-3 clickApply">Apply</a>
+												<a class="d-none btn btn-sm mb-0 me-3 clickApplyFrame">Apply</a>
+												<a class="d-none btn btn-sm mb-0 me-3 clickApplyMmr li_mmr">Apply</a>
+												<a class="d-none btn btn-sm mb-0 me-3 clickApplyFileAdmin">Apply</a>
+
+											</li>
+											<!-- <li class="nav-item d-flex align-items-center">
+												<a href="/web/login" class="nav-link text-body font-weight-bold px-0">
+													<i class="fa fa-user me-sm-1"></i>
+													<span class="d-sm-inline d-none">Sign In</span>
+												</a>
+											</li> -->
+											<!-- <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+												<a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+													<div class="sidenav-toggler-inner">
+													<i class="sidenav-toggler-line"></i>
+													<i class="sidenav-toggler-line"></i>
+													<i class="sidenav-toggler-line"></i>
+													</div>
+												</a>
+											</li> -->
+											<!-- <li class="nav-item px-3 d-flex align-items-center">
+												<a href="javascript:;" class="nav-link text-body p-0">
+													<i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
+												</a>
+											</li> -->
+											<li class="nav-item dropdown pe-2 d-flex align-items-center">
+												<a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+													<i class="fa fa-bell cursor-pointer"></i>
+												</a>
+												<ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
+													<li class="mb-2">
+														<a class="dropdown-item border-radius-md" href="javascript:;">
+															<div class="d-flex py-1">
+															<div class="my-auto">
+																<img src="office_dashboard/static/img/team-2.jpg" class="avatar avatar-sm  me-3 "/>
+															</div>
+															<div class="d-flex flex-column justify-content-center">
+																<h6 class="text-sm font-weight-normal mb-1">
+																<span class="font-weight-bold">New message</span> from Chris
+																</h6>
+																<p class="text-xs text-secondary mb-0 ">
+																<i class="fa fa-clock me-1"></i>
+																13 minutes ago
+																</p>
+															</div>
+															</div>
+														</a>
+													</li>
+													<li class="mb-2">
+													<a class="dropdown-item border-radius-md" href="javascript:;">
+														<div class="d-flex py-1">
+														<div class="my-auto">
+															<img src="office_dashboard/static/img/small-logos/logo-spotify.svg" class="avatar avatar-sm bg-gradient-dark  me-3 "/>
+														</div>
+														<div class="d-flex flex-column justify-content-center">
+															<h6 class="text-sm font-weight-normal mb-1">
+																<span class="font-weight-bold">Priority</span> Tickets Awaiting
+															</h6>
+															<p class="text-xs text-secondary mb-0 ">
+																<i class="fa fa-clock me-1"></i>
+																1 day
+															</p>
+														</div>
+														</div>
+													</a>
+													</li>
+													<li>
+													<a class="dropdown-item border-radius-md" href="javascript:;">
+														<div class="d-flex py-1">
+														<div class="avatar avatar-sm bg-gradient-secondary  me-3  my-auto">
+															<svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+															<title>credit-card</title>
+															<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+																<g transform="translate(-2169.000000, -745.000000)" fill="#FFFFFF" fill-rule="nonzero">
+																<g transform="translate(1716.000000, 291.000000)">
+																	<g transform="translate(453.000000, 454.000000)">
+																	<path class="color-background" d="M43,10.7482083 L43,3.58333333 C43,1.60354167 41.3964583,0 39.4166667,0 L3.58333333,0 C1.60354167,0 0,1.60354167 0,3.58333333 L0,10.7482083 L43,10.7482083 Z" opacity="0.593633743"></path>
+																	<path class="color-background" d="M0,16.125 L0,32.25 C0,34.2297917 1.60354167,35.8333333 3.58333333,35.8333333 L39.4166667,35.8333333 C41.3964583,35.8333333 43,34.2297917 43,32.25 L43,16.125 L0,16.125 Z M19.7083333,26.875 L7.16666667,26.875 L7.16666667,23.2916667 L19.7083333,23.2916667 L19.7083333,26.875 Z M35.8333333,26.875 L28.6666667,26.875 L28.6666667,23.2916667 L35.8333333,23.2916667 L35.8333333,26.875 Z"></path>
+																	</g>
+																</g>
+																</g>
+															</g>
+															</svg>
+														</div>
+														<div class="d-flex flex-column justify-content-center">
+															<h6 class="text-sm font-weight-normal mb-1">
+															Payment successfully completed
+															</h6>
+															<p class="text-xs text-secondary mb-0 ">
+															<i class="fa fa-clock me-1"></i>
+															2 days
+															</p>
+														</div>
+														</div>
+													</a>
+													</li>
+												</ul>
+											</li>
+										</ul>
+									</div>
+								</div>
+								
+							</nav>
+							<div class="form-group container-fluid py-1 px-3">
+								<div class="col-md-12">
+									<div class="form-check form-check-inline">
+										<nav aria-label="breadcrumb">
+											<ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+												<i id="opennavbtn" class="opennavbtn fa fa-bars text-lg opacity-10" aria-hidden="true"></i> 
+												<i id="closenavbtn" class="closenavbtn closeSb fa fa-bars text-lg opacity-10 d-none" aria-hidden="true"></i> 
+											</ol>
+										</nav>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input NGN" type="radio" checked="checked" name="NGN" id="NGN" value="NGN"/>
+										<label class="form-check-label" for="option2">Naira </label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input USD" type="radio" name="USD" id="USD" value="USD"/>
+										<label class="form-check-label" for="option3">USD</label>
+									</div>
+									<!-- <div class="form-check form-check-inline">
+										<input class="form-check-input" type="radio" name="options" id="option4" value="option4"/>
+										<label class="form-check-label" for="option4">All Currency</label>
+									</div> -->
+								</div>
+							</div>
+						</div>
+						<!-- End Navbar -->
+						<div class="s_website_form_field_description small form-text text-muted d-none">
+							<span id="y_data_for_chart"><t t-esc="y_data_chart"/></span>
+							<span id="x_data_for_chart"><t t-esc="x_data_chart"/></span>
+							
+							<span id="line_doughnut_filter"><t t-esc="line_doughnut_filter"/></span>
+						</div>
+						<!--SIDE BAR ENDS-->
+
+						<div class="mt-6 container-fluid py-4">
+							<!-- cards -->
+							<!--SIDE BAR-->
+							<div class="sidebar" id="mysidebar">
+								<!-- <a href="javascript:void(0)" class="closenavbtn">X</a> -->
+								<ul>
+									<li class="li_overview_dashboard">
+										<a href="#">
+											<i class="fa fa-th-large"></i>
+											<div>Dashboards</div>
+											
+										</a>
+									</li>
+									<li class="li_mmr">
+										<a href="#">
+											<i class="fa fa-money"></i>
+											<div>MMR</div>
+										</a>
+									</li>
+									<li class="li_frame_agreement">
+										<a href="#">
+											<i class="fa fa-snowflake-o"></i>
+											<div>Frame Agreement</div>
+										</a>
+									</li>
+									<li class="clickApply wipApply" id="wip_menu">
+										<a href="#">
+											<i class="fa fa-snowflake-o"></i>
+											<div>WIP</div>
+										</a>
+									</li>
+									<li class="li_project_analytic">
+										<a href="#">
+											<i class="fa fa-tasks"></i>
+											<div>File Admin</div>
+										</a>
+									</li>
+									<li>
+										<a href="#">
+											<i class="fa fa-users"></i>
+											<div>Customers</div>
+										</a>
+									</li>
+									<li>
+										<a href="#">
+											<i class="fa fa-cog"></i>
+											<div>Setting</div>
+											
+										</a>
+									</li>
+									<li>
+										<a href="#">
+											<i class="fa fa-bars"></i>
+											<div>Help</div>
+										</a>
+									</li>
+								</ul>
+							</div>
+
+							
+							<div id="generalOverviewCard">
+								<div class="row my-4 p-5 closeSb" id="dataFileDiv">
+									<div class="mycard col-lg-12 col-md-12 pl-5 mb-md-0 mb-4 closeSb">
+										<div class="card">
+											<div class="card-header pb-0 mb-2">
+												<div class="row">
+													<div class="col-sm-3 col-md-3 data-card">	
+														<div class="number clickcard" id="output_opened_files" t-att-value="'%s' % (output_opened_files.get('records'))"><t t-esc="output_opened_files.get('count')"/></div>
+														<div class="card-name">Active Files</div>
+														<!-- <div class="col-4 text-end">
+															<div class="icon-box">
+																<i class="fa fa-print"></i>
+															</div>
+														</div> -->
+													</div>
+													<div class="col-sm-3 col-md-3 data-card">
+														<div class="card-content">	
+															<div class="number clickcard" id="to_be_invoiced" t-att-value="'%s' % (to_be_invoiced.get('records'))"><t t-esc="to_be_invoiced.get('count')"/></div> 
+															<div class="card-name">To be Invoiced</div>
+														</div> 
+														<!-- <div class="col-4 text-end"> 
+															<div class="icon-box">
+																<i class="fa fa-bars"></i>
+															</div>
+														</div> -->
+													</div>
+													<div class="col-sm-3 col-md-3 data-card">
+														<div class="card-content">
+															<div class="number clickcard" id="to_be_closed_invoiced" t-att-value="'%s' % (to_be_closed_invoiced.get('records'))"><t t-esc="to_be_closed_invoiced.get('count')"/></div>
+															<div class="card-name">Invoiced (Not Closed)</div>
+														</div> 
+														<!-- <div class="col-4 text-end">
+															<div class="icon-box">
+																<i class="fa fa-book"></i>
+															</div>
+														</div> -->
+													</div>
+													<div class="col-sm-3 col-md-3 data-card">	
+														<div class="card-content">
+															<div class="number clickcard" id="closed_invoiced" t-att-value="'%s' % (closed_invoiced.get('records'))"><t t-esc="closed_invoiced.get('count')"/></div>
+															<div class="card-name">Closed Files</div>
+														</div> 
+														<!-- <div class="col-4 text-end">
+															<div class="icon-box">
+																<i class="fa fa-times"></i>
+															</div>
+														</div> -->
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-sm-3 col-md-3 data-card">
+														<div class="number clickcard" id="past_one_month_ids" t-att-value="'%s' % (past_one_month_ids.get('records'))"><t t-esc="past_one_month_ids.get('count')"/></div>
+														<div class="card-name">Overdue Over a Month</div>
+													</div>
+													<div class="col-sm-3 col-md-3 data-card">
+														<div class="number clickcard" id="files_to_be_approveds" t-att-value="'%s' % (files_to_be_approveds.get('records'))"><t t-esc="files_to_be_approveds.get('count')"/></div>
+														<div class="card-name">Files to be approved</div>
+													</div>
+													<div class="col-sm-3 col-md-3 data-card">	
+														<div class="number clickcard" id="pos_to_be_approved_ids" t-att-value="'%s' % (pos_to_be_approved_ids.get('records'))"><t t-esc="pos_to_be_approved_ids.get('count')"/></div>
+														<div class="card-name">Pos to be approved</div>
+													</div>
+													<div class="col-sm-3 col-md-3 data-card">
+														<div class="number clickcard" id="so_payment_not_registereds" t-att-value="'%s' % (so_payment_not_registereds.get('records'))"><t t-esc="so_payment_not_registereds.get('count')"/></div>
+														<div class="card-name">SO Payment not registered</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-sm-3 col-md-3 data-card">
+														<div class="number clickcard" id="files_wto_cost" t-att-value="'%s' % (files_wto_cost.get('records'))"><t t-esc="files_wto_cost.get('count')"/></div>
+														<div class="card-name">Files without Cost Budget</div>
+													</div>
+													<div class="col-sm-3 col-md-3 data-card">	
+														<div class="number clickcard" id="files_wto_rev" t-att-value="'%s' % (files_wto_rev.get('records'))"><t t-esc="files_wto_rev.get('count')"/></div>
+														<div class="card-name">Files without revenue budget</div>
+													</div>
+													<div class="col-sm-3 col-md-3 data-card">
+														<div class="number clickcard" id="pos_to_be_approved_ids" t-att-value="'%s' % (pos_to_be_approved_ids.get('records'))"><t t-esc="pos_to_be_approved_ids.get('count')"/></div>
+														<div class="card-name">Vendor invoices to be validated</div>
+													</div>
+													<div class="col-sm-3 col-md-3 data-card">
+														<div class="number clickcard" id="pos_to_be_paid_ids" t-att-value="'%s' % (pos_to_be_paid_ids.get('records'))"><t t-esc="pos_to_be_paid_ids.get('count')"/></div>
+														<div class="card-name">Po to be Paid</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-sm-3 col-md-3 data-card">
+														<div class="number" id="budget_revenue_total"><t t-esc="'{0:,}'.format(float(budget_revenue_total))"/></div>
+														<div class="card-name">Budget Revenue </div>
+													</div>
+													<div class="col-sm-3 col-md-3 data-card">
+														<div class="number" id="total_invoiced_revenue"><t t-esc="'{0:,}'.format(float(total_invoiced_revenue))"/></div>
+														<div class="card-name">Invoiced Revenue </div>
+													</div>
+													<div class="col-sm-3 col-md-3 data-card">
+														<div class="number" id="total_paid_invoiced_revenue"><t t-esc="'{0:,}'.format(float(total_paid_invoiced_revenue))"/></div>
+														<div class="card-name">Paid Revenue</div>
+													</div>
+													<div class="col-sm-3 col-md-3 data-card">
+														<div class="number" id="total_revenue_balance"><t t-esc="'{0:,}'.format(float(total_revenue_balance))"/></div>
+														<div class="card-name">Balance</div>
+													</div>
+												</div>
+
+												<div class="row">
+													<div class="col-sm-3 col-md-3 data-card">
+														<div class="number" id="total_budget"><t t-esc="'{0:,}'.format(float(total_budget))"/></div>
+														<div class="card-name">Budget Cost </div>
+													</div>
+													<div class="col-sm-3 col-md-3 data-card">
+														<div class="number" id="booked_budget_cost"><t t-esc="'{0:,}'.format(float(booked_budget_cost))"/></div>
+														<div class="card-name">Booked Cost </div>
+													</div>
+													<div class="col-sm-3 col-md-3 data-card">
+														<div class="number" id="paid_budget_cost"><t t-esc="'{0:,}'.format(float(paid_budget_cost))"/></div>
+														<div class="card-name">Paid Cost</div>
+													</div>
+													<div class="col-sm-3 col-md-3 data-card">
+														<div class="number" id="balance_budget_cost"><t t-esc="'{0:,}'.format(float(balance_budget_cost))"/></div>
+														<div class="card-name">Cost Balance</div>
+														<!-- <div class="col-4 text-end">
+															<div class="icon-box">
+																<i class="fa fa-balance-scale"></i>
+															</div>
+														</div> -->
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+
+
+
+								<!-- <div class="row mt-4 closeSb">
+									<div class="card pb-7 mb-4">
+                                        <div class="cardo closeSb">
+											<div class="office-card">
+												<div class="card-content">
+													<div class="number clickcard" id="output_opened_files" t-att-value="'%s' % (output_opened_files.get('records'))"><t t-esc="output_opened_files.get('count')"/></div>
+													<div class="card-name">Open Files</div>
+												</div>
+												<div class="col-4 text-end">
+													<div class="icon-box">
+														<i class="fa fa-print"></i>
+													</div>
+												</div>
+											</div>
+											<div class="office-card tooltip-container" data-tooltip="This shows the total records that ready for invoice to be added">
+												<div class="card-content">	
+													<div class="number clickcard" id="to_be_invoiced" t-att-value="'%s' % (to_be_invoiced.get('records'))"><t t-esc="to_be_invoiced.get('count')"/></div> 
+													<div class="card-name">To be Invoiced</div>
+												</div> 
+												<div class="col-4 text-end"> 
+													<div class="icon-box">
+														<i class="fa fa-bars"></i>
+													</div>
+												</div>
+											</div>
+											<div class="office-card tooltip-container" data-tooltip="This the total project files that has SO / invoices that has not been closed">
+												<div class="card-content">
+													<div class="number clickcard" id="to_be_closed_invoiced" t-att-value="'%s' % (to_be_closed_invoiced.get('records'))"><t t-esc="to_be_closed_invoiced.get('count')"/></div>
+													<div class="card-name">Invoiced (Not Closed)</div>
+												</div> 
+												<div class="col-4 text-end">
+													<div class="icon-box">
+														<i class="fa fa-book"></i>
+													</div>
+												</div>
+											</div>
+
+											<div class="office-card" data-tooltip="Total closed invoices">
+													<div class="card-content">
+														<div class="number clickcard" id="closed_invoiced" t-att-value="'%s' % (closed_invoiced.get('records'))"><t t-esc="closed_invoiced.get('count')"/></div>
+														<div class="card-name">Closed Files</div>
+													</div> 
+												<div class="col-4 text-end">
+													<div class="icon-box">
+														<i class="fa fa-times"></i>
+													</div>
+												</div>
+											</div>
+											<div class="office-card" data-tooltip="Total closed invoices">
+												<div class="card-content"> 
+													<div class="number clickcard" id="past_one_month_ids" t-att-value="'%s' % (past_one_month_ids.get('records'))"><t t-esc="past_one_month_ids.get('count')"/></div>
+													<div class="card-name">Overdue Over a Month : </div>
+												</div> 
+											</div>
+											<div class="office-card" data-tooltip="Total Files that is waiting for approval">
+												<div class="card-content"> 
+													<div class="number clickcard" id="files_to_be_approveds" t-att-value="'%s' % (files_to_be_approveds.get('records'))"><t t-esc="files_to_be_approveds.get('count')"/></div>
+													<div class="card-name">Files to be approved</div>
+												</div> 
+											</div>
+
+											<div class="office-card" data-tooltip="total of files with POs to be approved">
+												<div class="card-content"> 
+													<div class="number clickcard" id="pos_to_be_approved_ids" t-att-value="'%s' % (pos_to_be_approved_ids.get('records'))"><t t-esc="pos_to_be_approved_ids.get('count')"/></div>
+													<div class="card-name">Pos to be approved</div>
+												</div> 
+											</div>
+											<div class="office-card" data-tooltip="Total Files with SOs that is waiting for confirmation and payment">
+												<div class="card-content"> 
+													<div class="number clickcard" id="so_payment_not_registereds" t-att-value="'%s' % (so_payment_not_registereds.get('records'))"><t t-esc="so_payment_not_registereds.get('count')"/></div>
+													<div class="card-name">SO Payment not registered</div>
+												</div> 
+											</div>
+											<div class="office-card" data-tooltip="Total Files without POs">
+												<div class="card-content"> 
+													<div class="number clickcard" id="files_wto_cost" t-att-value="'%s' % (files_wto_cost.get('records'))"><t t-esc="files_wto_cost.get('count')"/></div>
+													<div class="card-name">Files without Cost Budget</div>
+												</div> 
+											</div>
+											<div class="office-card" data-tooltip="Total Files without Revenue (SOs)">
+												<div class="card-content"> 
+													<div class="number clickcard" id="files_wto_rev" t-att-value="'%s' % (files_wto_rev.get('records'))"><t t-esc="files_wto_rev.get('count')"/></div>
+													<div class="card-name">Files without revenue budget</div>
+												</div> 
+											</div>
+
+											<div class="office-card" data-tooltip="Vendor POs to be validated">
+												<div class="card-content"> 
+													<div class="number clickcard" id="pos_to_be_approved_ids" t-att-value="'%s' % (pos_to_be_approved_ids.get('records'))"><t t-esc="pos_to_be_approved_ids.get('count')"/></div>
+													<div class="card-name">Vendor invoices to be validated</div>
+												</div> 
+											</div>
+
+											<div class="office-card" data-tooltip="POs payment that is ready to be registered ">
+												<div class="card-content"> 
+													<div class="number clickcard" id="pos_to_be_paid_ids" t-att-value="'%s' % (pos_to_be_paid_ids.get('records'))"><t t-esc="pos_to_be_paid_ids.get('count')"/></div>
+													<div class="card-name">Po to be Paid</div>
+												</div> 
+											</div>
+
+											<div class="office-card">
+												<div class="card-content">
+													<div class="number" id="budget_revenue_total"> 
+														<div class="number" id="budget_revenue_total"><t t-esc="'{0:,}'.format(float(budget_revenue_total))"/></div>
+													</div>
+													<div class="card-name">Budget Revenue </div>
+												</div> 
+												<div class="col-4 text-end">
+													<div class="icon-box">
+														<i class="fa fa-briefcase"></i>
+													</div>
+												</div>
+											</div>
+											<div class="office-card">
+												<div class="card-content">
+												<div class="number" id="total_invoiced_revenue"><t t-esc="'{0:,}'.format(float(total_invoiced_revenue))"/></div>
+													<div class="card-name">Invoiced Revenue </div>
+												</div> 
+												 
+											</div> 
+
+											<div class="office-card">
+												<div class="card-content">
+													<div class="number" id="total_paid_invoiced_revenue"><t t-esc="'{0:,}'.format(float(total_paid_invoiced_revenue))"/></div>
+													<div class="card-name">Paid Revenue</div>
+												</div>  
+											</div>
+											<div class="office-card">
+												<div class="card-content">
+													<div class="number" id="total_revenue_balance"><t t-esc="'{0:,}'.format(float(total_revenue_balance))"/></div>
+													<div class="card-name">Balance</div>
+												</div>  
+											</div>
+
+											<div class="office-card">
+												<div class="card-content">
+													<div class="number" id="total_budget"> 
+														<div class="number" id="total_budget"><t t-esc="'{0:,}'.format(float(total_budget))"/></div>
+													</div>
+													<div class="card-name">Budget Cost </div>
+												</div>  
+											</div>
+											<div class="office-card">
+												<div class="card-content">
+												<div class="number" id="booked_budget_cost"><t t-esc="'{0:,}'.format(float(booked_budget_cost))"/></div>
+													<div class="card-name">Booked Cost </div>
+												</div>  
+											</div> 
+
+											<div class="office-card">
+												<div class="card-content">
+													<div class="number" id="paid_budget_cost"><t t-esc="'{0:,}'.format(float(paid_budget_cost))"/></div>
+													<div class="card-name">Paid Cost</div>
+												</div>  
+											</div>
+											<div class="office-card">
+												<div class="card-content">
+													<div class="number" id="balance_budget_cost"><t t-esc="'{0:,}'.format(float(balance_budget_cost))"/></div>
+													<div class="card-name">Cost Balance</div>
+												</div> 
+												<div class="col-4 text-end">
+													<div class="icon-box">
+														<i class="fa fa-balance-scale"></i>
+													</div>
+												</div>
+											</div>
+
+											<div class="charts">
+												<div class="chart chart-left" id="graph-chart">
+													<h2 id="display-header">Earnings (Past 12 Months)</h2>
+													<canvas id="myChartLine"></canvas>
+												</div>
+												<div class="chart chart-right" id="doughnut-chart">
+													<h2>Earnings</h2>
+													<canvas id="doughnutCanvas"></canvas>
+												</div>
+											</div>
+											
+										</div> 
+									</div> 
+								</div>  -->
+								<div class="row mt-4 closeSb">
+									<!-- <div class="col-chart col-lg-5 mb-lg-0 mb-4"> -->
+									<div class="col-chart col-lg-7">
+										<div class="card z-index-2">
+											<div class="card-header pb-0 closeSb">
+												<h6>File Revenue Analysis</h6>
+												<p class="text-sm">
+													<i class="fa fa-arrow-up text-success"></i>
+													<span class="font-weight-bold">Progress </span> as at <t t-esc="datetime.datetime.now().strftime('%B %d, %Y')"/>
+												</p>
+											</div>
+											<div id="LineChartDiv" class="card-body p-3">
+												<canvas id="LineChart"></canvas>
+											</div>
+										</div>
+									</div>
+									<div class="col-chart col-lg-5">
+										<div class="card h-100 p-3">
+											<div id="doughnutCanvasDiv" class="border-radius-lg bg-cover h-100 p-3 py-2">
+												<h6>File budget </h6>
+												<p class="text-black">Shows the total budget for files</p>
+												<canvas id="doughnutCanvas"></canvas> 
+												<a class="text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="/web">
+													Click here
+												<i class="fa fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row mt-4 closeSb" id="chartCardDiv">
+									<div class="col-chart col-lg-5 mb-lg-0 mb-4">
+										<div class="card z-index-2">
+											<div class="card-body p-3">
+												<div id="chartbarsDiv" class="bg-gradient-dark border-radius-lg py-3 pe-1 mb-3">
+													<!-- <div class="chart"> -->
+													<canvas id="chart-bars" class="chart-canvas text-white" height="200"></canvas>
+													<!-- </div> -->
+												</div>
+												<h6 class="ms-2 mt-4 mb-0"> # Active Files</h6>
+												<p class="text-sm ms-2"> (<span class="font-weight-bolder">+23%</span>) than last week </p>
+												<div class="container border-radius-lg">
+													<div class="row">
+													<div class="col-3 py-3 ps-0">
+														<div class="d-flex mb-2">
+															<div class="icon icon-shape icon-xxs shadow border-radius-sm bg-gradient-primary text-center me-2 d-flex align-items-center justify-content-center">
+																<svg width="10px" height="10px" viewBox="0 0 40 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+																<title>document</title>
+																<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+																	<g transform="translate(-1870.000000, -591.000000)" fill="#FFFFFF" fill-rule="nonzero">
+																	<g transform="translate(1716.000000, 291.000000)">
+																		<g transform="translate(154.000000, 300.000000)">
+																		<path class="color-background" d="M40,40 L36.3636364,40 L36.3636364,3.63636364 L5.45454545,3.63636364 L5.45454545,0 L38.1818182,0 C39.1854545,0 40,0.814545455 40,1.81818182 L40,40 Z" opacity="0.603585379"></path>
+																		<path class="color-background" d="M30.9090909,7.27272727 L1.81818182,7.27272727 C0.814545455,7.27272727 0,8.08727273 0,9.09090909 L0,41.8181818 C0,42.8218182 0.814545455,43.6363636 1.81818182,43.6363636 L30.9090909,43.6363636 C31.9127273,43.6363636 32.7272727,42.8218182 32.7272727,41.8181818 L32.7272727,9.09090909 C32.7272727,8.08727273 31.9127273,7.27272727 30.9090909,7.27272727 Z M18.1818182,34.5454545 L7.27272727,34.5454545 L7.27272727,30.9090909 L18.1818182,30.9090909 L18.1818182,34.5454545 Z M25.4545455,27.2727273 L7.27272727,27.2727273 L7.27272727,23.6363636 L25.4545455,23.6363636 L25.4545455,27.2727273 Z M25.4545455,20 L7.27272727,20 L7.27272727,16.3636364 L25.4545455,16.3636364 L25.4545455,20 Z"></path>
+																		</g>
+																	</g>
+																	</g>
+																</g>
+																</svg>
+															</div>
+															<p class="text-xs mt-1 mb-0 font-weight-bold">Task</p>
+														</div>
+														<h4 class="font-weight-bolder"><t t-esc="task_not_done"/></h4>
+														<div class="progress w-75">
+														<div class="progress-bar bg-dark w-60" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+														</div>
+													</div>
+													<div class="col-3 py-3 ps-0">
+														<div class="d-flex mb-2">
+														<div class="icon icon-shape icon-xxs shadow border-radius-sm bg-gradient-info text-center me-2 d-flex align-items-center justify-content-center">
+															<svg width="10px" height="10px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+															<title>spaceship</title>
+															<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+																<g transform="translate(-1720.000000, -592.000000)" fill="#FFFFFF" fill-rule="nonzero">
+																<g transform="translate(1716.000000, 291.000000)">
+																	<g transform="translate(4.000000, 301.000000)">
+																	<path class="color-background" d="M39.3,0.706666667 C38.9660984,0.370464027 38.5048767,0.192278529 38.0316667,0.216666667 C14.6516667,1.43666667 6.015,22.2633333 5.93166667,22.4733333 C5.68236407,23.0926189 5.82664679,23.8009159 6.29833333,24.2733333 L15.7266667,33.7016667 C16.2013871,34.1756798 16.9140329,34.3188658 17.535,34.065 C17.7433333,33.98 38.4583333,25.2466667 39.7816667,1.97666667 C39.8087196,1.50414529 39.6335979,1.04240574 39.3,0.706666667 Z M25.69,19.0233333 C24.7367525,19.9768687 23.3029475,20.2622391 22.0572426,19.7463614 C20.8115377,19.2304837 19.9992882,18.0149658 19.9992882,16.6666667 C19.9992882,15.3183676 20.8115377,14.1028496 22.0572426,13.5869719 C23.3029475,13.0710943 24.7367525,13.3564646 25.69,14.31 C26.9912731,15.6116662 26.9912731,17.7216672 25.69,19.0233333 L25.69,19.0233333 Z"></path>
+																	<path class="color-background" d="M1.855,31.4066667 C3.05106558,30.2024182 4.79973884,29.7296005 6.43969145,30.1670277 C8.07964407,30.6044549 9.36054508,31.8853559 9.7979723,33.5253085 C10.2353995,35.1652612 9.76258177,36.9139344 8.55833333,38.11 C6.70666667,39.9616667 0,40 0,40 C0,40 0,33.2566667 1.855,31.4066667 Z"></path>
+																	<path class="color-background" d="M17.2616667,3.90166667 C12.4943643,3.07192755 7.62174065,4.61673894 4.20333333,8.04166667 C3.31200265,8.94126033 2.53706177,9.94913142 1.89666667,11.0416667 C1.5109569,11.6966059 1.61721591,12.5295394 2.155,13.0666667 L5.47,16.3833333 C8.55036617,11.4946947 12.5559074,7.25476565 17.2616667,3.90166667 L17.2616667,3.90166667 Z" opacity="0.598539807"></path>
+																	<path class="color-background" d="M36.0983333,22.7383333 C36.9280725,27.5056357 35.3832611,32.3782594 31.9583333,35.7966667 C31.0587397,36.6879974 30.0508686,37.4629382 28.9583333,38.1033333 C28.3033941,38.4890431 27.4704606,38.3827841 26.9333333,37.845 L23.6166667,34.53 C28.5053053,31.4496338 32.7452344,27.4440926 36.0983333,22.7383333 L36.0983333,22.7383333 Z" opacity="0.598539807"></path>
+																	</g>
+																</g>
+																</g>
+															</g>
+															</svg>
+														</div>
+														<p class="text-xs mt-1 mb-0 font-weight-bold">New</p>
+														</div>
+														<h4 class="font-weight-bolder"><t t-esc="draft_lead_memo"/></h4>
+														<div class="progress w-75">
+														<div class="progress-bar bg-dark w-90" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+														</div>
+													</div>
+													<!-- <div class="col-3 py-3 ps-0">
+														<div class="d-flex mb-2">
+														<div class="icon icon-shape icon-xxs shadow border-radius-sm bg-gradient-warning text-center me-2 d-flex align-items-center justify-content-center">
+															<svg width="10px" height="10px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+															<title>credit-card</title>
+															<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+																<g transform="translate(-2169.000000, -745.000000)" fill="#FFFFFF" fill-rule="nonzero">
+																<g transform="translate(1716.000000, 291.000000)">
+																	<g transform="translate(453.000000, 454.000000)">
+																	<path class="color-background" d="M43,10.7482083 L43,3.58333333 C43,1.60354167 41.3964583,0 39.4166667,0 L3.58333333,0 C1.60354167,0 0,1.60354167 0,3.58333333 L0,10.7482083 L43,10.7482083 Z" opacity="0.593633743"></path>
+																	<path class="color-background" d="M0,16.125 L0,32.25 C0,34.2297917 1.60354167,35.8333333 3.58333333,35.8333333 L39.4166667,35.8333333 C41.3964583,35.8333333 43,34.2297917 43,32.25 L43,16.125 L0,16.125 Z M19.7083333,26.875 L7.16666667,26.875 L7.16666667,23.2916667 L19.7083333,23.2916667 L19.7083333,26.875 Z M35.8333333,26.875 L28.6666667,26.875 L28.6666667,23.2916667 L35.8333333,23.2916667 L35.8333333,26.875 Z"></path>
+																	</g>
+																</g>
+																</g>
+															</g>
+															</svg>
+														</div>
+														<p class="text-xs mt-1 mb-0 font-weight-bold">Sales</p>
+														</div>
+														<h4 class="font-weight-bolder">₦43,900</h4>
+														<div class="progress w-75">
+														<div class="progress-bar bg-dark w-30" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+														</div>
+													</div> -->
+													<div class="col-3 py-3 ps-0">
+														<div class="d-flex mb-2">
+														<div class="icon icon-shape icon-xxs shadow border-radius-sm bg-gradient-danger text-center me-2 d-flex align-items-center justify-content-center">
+															<svg width="10px" height="10px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+															<title>settings</title>
+															<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+																<g transform="translate(-2020.000000, -442.000000)" fill="#FFFFFF" fill-rule="nonzero">
+																<g transform="translate(1716.000000, 291.000000)">
+																	<g transform="translate(304.000000, 151.000000)">
+																	<polygon class="color-background" opacity="0.596981957" points="18.0883333 15.7316667 11.1783333 8.82166667 13.3333333 6.66666667 6.66666667 0 0 6.66666667 6.66666667 13.3333333 8.82166667 11.1783333 15.315 17.6716667"></polygon>
+																	<path class="color-background" d="M31.5666667,23.2333333 C31.0516667,23.2933333 30.53,23.3333333 30,23.3333333 C29.4916667,23.3333333 28.9866667,23.3033333 28.48,23.245 L22.4116667,30.7433333 L29.9416667,38.2733333 C32.2433333,40.575 35.9733333,40.575 38.275,38.2733333 L38.275,38.2733333 C40.5766667,35.9716667 40.5766667,32.2416667 38.275,29.94 L31.5666667,23.2333333 Z" opacity="0.596981957"></path>
+																	<path class="color-background" d="M33.785,11.285 L28.715,6.215 L34.0616667,0.868333333 C32.82,0.315 31.4483333,0 30,0 C24.4766667,0 20,4.47666667 20,10 C20,10.99 20.1483333,11.9433333 20.4166667,12.8466667 L2.435,27.3966667 C0.95,28.7083333 0.0633333333,30.595 0.00333333333,32.5733333 C-0.0583333333,34.5533333 0.71,36.4916667 2.11,37.89 C3.47,39.2516667 5.27833333,40 7.20166667,40 C9.26666667,40 11.2366667,39.1133333 12.6033333,37.565 L27.1533333,19.5833333 C28.0566667,19.8516667 29.01,20 30,20 C35.5233333,20 40,15.5233333 40,10 C40,8.55166667 39.685,7.18 39.1316667,5.93666667 L33.785,11.285 Z"></path>
+																	</g>
+																</g>
+																</g>
+															</g>
+															</svg>
+														</div>
+														<p class="text-xs mt-1 mb-0 font-weight-bold">Extra Process</p>
+														</div>
+														<h4 class="font-weight-bolder"><t t-esc="additional_po_process"/></h4>
+														<div class="progress w-75">
+														<div class="progress-bar bg-dark w-50" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+														</div>
+													</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-chart col-lg-7">
+										<div class="card z-index-2">
+											<div class="card-header pb-0">
+												<h6>Monthly Revenue</h6>
+												<p class="text-sm">
+													<i class="fa fa-arrow-up text-success"></i>
+													<span class="font-weight-bold">Progress </span> as at <t t-esc="datetime.datetime.now().strftime('%B %d, %Y')"/>
+												</p>
+											</div>
+											<div class="card-body p-3">
+												<div class="chart" id="tickchartlineDiv">
+													<canvas id="tickchart-line" class="chart-canvas" height="300"></canvas>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row my-4 closeSb" id="TableDiv">
+									<div class="mycard col-lg-8 col-md-6 mb-md-0 mb-4">
+										<div class="card">
+											<div class="card-header pb-0 mb-2">
+												<div class="row">
+													<div class="col-lg-6 col-7 mb-2">
+														<h6>Projects</h6>
+														<p class="text-sm mb-0">
+															<i class="fa fa-check text-info" aria-hidden="true"></i>
+															<span class="font-weight-bold ms-1">Table Analysis</span> 
+														</p>
+													</div>
+													<div class="col-lg-6 col-5 my-auto text-end mb-2">
+														<div class="dropdown float-lg-end pe-4">
+															<a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
+															<i class="fa fa-ellipsis-v text-secondary"></i>
+															</a> 
+															<ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
+																<li><a class="dropdown-item border-radius-md" id="table_by_project" href="javascript:;">By Project</a></li>
+																<li><a class="dropdown-item border-radius-md" id="project_by_current_year" href="javascript:;">Current Year: <t t-esc="calendar_event.get('curr_year')"/></a></li>
+																<li><a class="dropdown-item border-radius-md" id="project_by_department" href="javascript:;">Department</a></li>
+																<li><a class="dropdown-item border-radius-md" id="project_by_branch" href="javascript:;">Branch</a></li>
+																<li> 
+																	<button class="o_menu_item o_accordion_toggle dropdown-item text-truncate open" 
+																	tabindex="0" aria-expanded="true">Start Date</button>
+
+																	<div class="o_accordion_values ms-4 border-start">
+																		
+																		<t t-foreach="calendar_event.get('all_months')" t-as="mnt">
+																			<span class="dropdown-item o_item_option" role="menuitemcheckbox" tabindex="0" aria-checked="false"><t t-esc="mnt"/></span>
+																		</t>
+																	</div>
+																</li>
+															</ul>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="card-body px-0 pb-2 mt-0 pt-0">
+												<div class="table-responsive">
+													<table class="table align-items-center mb-0">
+														<thead>
+															<tr>
+															<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"></th>
+															<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project Name</th>
+															<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Customer</th>
+															<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Budget Revenue(NGN)</th>
+															<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Budget RVN(USD)</th>
+															<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Invoiced Revenue(NGN)</th>
+															<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Invoiced RVN(USD)</th>
+															</tr>
+														</thead>
+														<tbody id="table_customer_info_id">
+															<t t-foreach="group_project_table" t-as="rec">
+																<tr>
+																	<td class="text-sm">
+																		<span class="text-xs font-weight-bold"><t t-esc="rec.get('count')"/></span>
+																	</td>
+																	<td class="text-sm">
+																		<span class="text-xs font-weight-bold"><t t-esc="rec.get('project_name')"/></span>
+																	</td>
+																	<td class="align-middle text-center text-sm">
+																		<span class="text-xs font-weight-bold"><t t-esc="rec.get('customer_name')"/></span>
+																	</td>
+																	<td class="align-middle text-center text-sm">
+																		<span class="text-xs font-weight-bold"><t t-esc="'{0:,}'.format(rec.get('ng_budget_total'))"/></span>
+																	</td>
+																	<td class="align-middle text-center text-sm">
+																		<span class="text-xs font-weight-bold"><t t-esc="rec.get('usd_budget_total')"/></span>
+																	</td>
+																	<td class="align-middle text-center text-sm">
+																		<span class="text-xs font-weight-bold"><t t-esc="'{0:,}'.format(rec.get('ng_revenue_total'))"/></span>
+																	</td>
+																	<td class="align-middle text-center text-sm">
+																		<span class="text-xs font-weight-bold"><t t-esc="'{0:,}'.format(rec.get('usd_revenue_total'))"/></span>
+																	</td>
+																	
+																	<!-- <td class="align-middle">
+																		<div class="progress-wrapper w-75 mx-auto">
+																		<div class="progress-info">
+																			<div class="progress-percentage">
+																			<span class="text-xs font-weight-bold"><span t-field="memo.status_progress"/></span>
+																			</div>
+																		</div>
+																		<div class="progress">
+																			<div class="progress-bar bg-gradient-info w-60" role="progressbar" aria-valuenow="{{memo.status_progress}}" aria-valuemin="0" aria-valuemax="100"></div>
+																		</div>
+																		</div>
+																	</td> -->
+																</tr>
+															</t> 
+															<div class="mt-5 mb-5">
+																<td class="">
+																	<span class="font-weight-bold"></span>
+																</td>
+																<td class="">
+																	<span class="font-weight-bold"></span>
+																</td>
+																<td class="">
+																	<span class="font-weight-bold">Grand Total</span>
+																</td>
+
+																<td class="">
+																	<span class="font-weight-bold">NGN <t t-esc="'{0:,}'.format(sum([rec.get('ng_budget_total') for rec in group_project_table]))"/></span>
+																</td>
+																<td class="">
+																	<span class="font-weight-bold">USD <t t-esc="'{0:,}'.format(sum([rec.get('usd_budget_total') for rec in group_project_table]))"/></span>
+																</td>
+																<td class="">
+																	<span class="font-weight-bold">NGN <t t-esc="'{0:,}'.format(sum([rec.get('ng_revenue_total') for rec in group_project_table]))"/></span>
+																</td>
+																<td class="">
+																	<span class="font-weight-bold">USD <t t-esc="'{0:,}'.format(sum([rec.get('usd_revenue_total') for rec in group_project_table]))"/></span>
+																</td>
+															</div>
+														</tbody>
+
+														<!-- <tbody>
+															<t t-foreach="memo_ids" t-as="memo">
+																<tr>
+																	<td>
+																		<div class="d-flex px-2 py-1">
+																		<div>
+																			<img src="office_dashboard/static/img/small-logos/logo-xd.svg" class="avatar avatar-sm me-3" alt="xd"/>
+																		</div>
+																		<div class="d-flex flex-column justify-content-center"> 
+																			<h6 class="mb-0 text-sm"><a class="text-sm" t-att-href="'/web#id=%d&amp;view_type=form&amp;model=%s' % (memo.id, memo._name)" target="_blank" rel="noreferrer noopener"><span t-field="memo.name"/></a></h6>
+																		</div>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="avatar-group mt-2">
+																			<t t-foreach="memo.users_followers" t-as="approver">
+																				<a href="#" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Employee">
+																					<img src="office_dashboard/static/img/team-1.jpg" alt="team1"/>
+																				</a> 
+																			</t>
+																		</div>
+																	</td>
+																	<td class="align-middle text-center text-sm">
+																		<span class="text-xs font-weight-bold"><span t-field="memo.stage_id.name"/></span>
+																	</td>
+																	<td class="align-middle">
+																		<div class="progress-wrapper w-75 mx-auto">
+																		<div class="progress-info">
+																			<div class="progress-percentage">
+																			<span class="text-xs font-weight-bold"><span t-field="memo.status_progress"/></span>
+																			</div>
+																		</div>
+																		<div class="progress">
+																			<div class="progress-bar {{'bg-gradient-info' if memo.status_progress &gt; 50 else 'bg-gradient-success' }} w-60" role="progressbar" aria-valuenow="{{memo.status_progress}}" aria-valuemin="0" aria-valuemax="100"></div>
+																			<div class="progress-bar bg-gradient-info w-60" role="progressbar" aria-valuenow="{{memo.status_progress}}" aria-valuemin="0" aria-valuemax="100"></div>
+																		</div>
+																		</div>
+																	</td>
+																</tr>
+															</t> 
+														</tbody> -->
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-4 col-md-6">
+										<div class="card h-100">
+											<div class="card-header pb-0">
+											<h6>Operation Overview</h6>
+											<p class="text-sm">
+												<i class="fa fa-arrow-up text-success" aria-hidden="true"></i>
+												<span class="font-weight-bold">24%</span> this month
+											</p>
+											</div>
+											<div class="card-body p-3">
+												<div class="timeline timeline-one-side">
+													<div class="timeline-block mb-3">
+														<span class="timeline-step">
+															<i class="ni ni-bell-55 text-success text-gradient"></i>
+														</span>
+														<div class="timeline-content">
+															<h6 class="text-dark text-sm font-weight-bold mb-0 clickcard" id="past_one_week_ids" t-att-value="'%s' % (past_one_week_ids.get('records'))">Due 7 days ago: <t t-esc="past_one_week_ids.get('count')"/></h6>
+															<p class="text-secondary font-weight-bold text-xs mt-1 mb-0"><t t-esc="datetime.datetime.now().strftime('%B %d, %Y')"/> 8:00 PM</p>
+														</div> 
+													</div>
+													<div class="timeline-block mb-3">
+														<span class="timeline-step">
+															<i class="ni ni-html5 text-danger text-gradient"></i>
+														</span>
+														<div class="timeline-content">
+															<h6 class="text-dark text-sm font-weight-bold mb-0 clickcard" id="past_two_week_ids" t-att-value="'%s' % (past_two_week_ids.get('records'))">Due Over a week: <t t-esc="past_two_week_ids.get('count')"/></h6>
+															<p class="text-secondary font-weight-bold text-xs mt-1 mb-0"><t t-esc="datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')"/></p>
+														</div>
+													</div>
+													<div class="timeline-block mb-3">
+														<span class="timeline-step">
+															<i class="ni ni-cart text-info text-gradient"></i>
+														</span>
+														<div class="timeline-content">
+															<h6 class="text-dark text-sm font-weight-bold mb-0 clickcard" id="past_one_month_ids" t-att-value="'%s' % (past_one_month_ids.get('records'))">Overdue Over a Month: <t t-esc="past_one_month_ids.get('count')"/></h6>
+															<p class="text-secondary font-weight-bold text-xs mt-1 mb-0"><t t-esc="datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S')"/></p>
+														</div>
+													</div>
+													<div class="timeline-block mb-3">
+														<span class="timeline-step">
+															<i class="ni ni-credit-card text-warning text-gradient"></i>
+														</span>
+														<div class="timeline-content">
+															<h6 class="text-dark text-sm font-weight-bold mb-0">Clients Expected To pay: <t t-esc="request_item.get('new_request')"/></h6>
+															<p class="text-secondary font-weight-bold text-xs mt-1 mb-0"><t t-esc="datetime.datetime.now().strftime('%B %d, %Y')"/> </p>
+															<t t-foreach="request_item.get('expected_customers_to_pay')" t-as="des">
+																<li>    
+																	<p class="text-secondary font-weight-bold text-xs mt-1 mb-0"><t t-esc="des"/> </p>
+																</li>
+															</t>
+														</div>
+													</div>
+													<div class="timeline-block mb-3">
+														<span class="timeline-step">
+															<i class="ni ni-key-25 text-primary text-gradient"></i>
+														</span>
+														<div class="timeline-content">
+															<h6 class="text-dark text-sm font-weight-bold mb-0">Expected Projection: 399</h6>
+															<p class="text-secondary font-weight-bold text-xs mt-1 mb-0">20 APR 4:54 AM</p>
+														</div>
+													</div>
+													<div class="timeline-block">
+														<span class="timeline-step">
+															<i class="ni ni-money-coins text-dark text-gradient"></i>
+														</span>
+														<div class="timeline-content">
+															<h6 class="text-dark text-sm font-weight-bold mb-0">Already Defaulting Dept: 3</h6>
+															<p class="text-secondary font-weight-bold text-xs mt-1 mb-0">25 APR</p>
+														</div>
+													</div>
+													<div class="timeline-block">
+														<span class="timeline-step">
+															<i class="ni ni-money-coins text-dark text-gradient"></i>
+														</span>
+														<div class="timeline-content">
+															<h6 class="text-dark text-sm font-weight-bold mb-0">Potential(s): 550</h6>
+															<p class="text-secondary font-weight-bold text-xs mt-1 mb-0">20 APR</p>
+														</div>
+													</div>
+													<div class="timeline-block">
+														<span class="timeline-step">
+															<i class="ni ni-money-coins text-dark text-gradient"></i>
+														</span>
+														<div class="timeline-content">
+															<h6 class="text-dark text-sm font-weight-bold mb-0">Uncompleted Tasks: 43</h6>
+															<p class="text-secondary font-weight-bold text-xs mt-1 mb-0">21 APR</p>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<hr></hr>
+
+							<div class="row my-4 p-5 closeSb" id="fileAdminDiv">
+								<div class="mycard col-lg-12 col-md-12 pl-5 mb-md-0 mb-4">
+									<div class="card">
+										<div class="card-header pb-0 mb-2">
+											<div class="row">
+												<div class="col-lg-6 col-7 mb-2">
+													<h2><t t-esc="user_id.company_id.name"/></h2>
+													<p class="text-sm mb-0">
+														<i class="fa fa-check text-info" aria-hidden="true"></i>
+														<span class="font-weight-bold ms-1">File Administration</span> 
+													</p>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-sm-3 col-md-3 cardfile">	
+													<div class="number clickcard" id="output_opened_files" t-att-value="'%s' % (output_opened_files.get('records'))"><t t-esc="output_opened_files.get('count')"/></div>
+													<div class="card-name">Active files</div>
+												</div>
+												<div class="col-sm-3 col-md-3 cardfile">
+													<div class="number clickcard" id="closed_invoiced" t-att-value="'%s' % (closed_invoiced.get('records'))"><t t-esc="closed_invoiced.get('count')"/></div>
+													<div class="card-name">Closed files</div>
+												</div>
+												<div class="col-sm-9 col-md-3 cardfile">
+													<div class="number clickcard" t-att-value="'%s' % (past_one_month_ids.get('records'))"><t t-esc="past_one_month_ids.get('count')"/></div>
+													<div class="card-name">Over Due Files</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-sm-3 col-md-3 cardfile">	
+													<div class="number clickcard" id="files_to_be_closeds" t-att-value="'%s' % (files_to_be_closeds.get('records'))"><t t-esc="files_to_be_closeds.get('count')"/></div>
+													<div class="card-name">Files to be closed</div>
+												</div>
+												<div class="col-sm-9 col-md-3 cardfile">
+													<div class="number clickcard" id="files_to_be_approveds" t-att-value="'%s' % (files_to_be_approveds.get('records'))"><t t-esc="files_to_be_approveds.get('count')"/></div>
+													<div class="card-name">Files to be approved</div>
+												</div>
+												<div class="col-sm-9 col-md-3 cardfile">
+													<div class="number clickcard" t-att-value="'%s' % (pos_to_be_approved_ids.get('records'))"><t t-esc="pos_to_be_approved_ids.get('count')"/></div>
+													<div class="card-name">Pos to be approved</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-sm-3 col-md-4 cardfile">	
+													<div class="number clickcard" id="so_payment_not_registereds" t-att-value="'%s' % (so_payment_not_registereds.get('records'))"><t t-esc="so_payment_not_registereds.get('count')"/></div>
+													<div class="card-name">SO Payment not registered</div>
+												</div>
+												<div class="col-sm-9 col-md-4 cardfile">
+													<div class="number clickcard" id="files_wto_cost" t-att-value="'%s' % (files_wto_cost.get('records'))"><t t-esc="files_wto_cost.get('count')"/></div>
+													<div class="card-name">Files without Cost Budget</div>
+												</div>
+												<div class="col-sm-9 col-md-4 cardfile">
+													<div class="number clickcard" id="files_wto_rev" t-att-value="'%s' % (files_wto_rev.get('records'))"><t t-esc="files_wto_rev.get('count')"/></div>
+													<div class="card-name">Files without revenue budget</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-sm-3 col-md-6 cardfile">	
+													<div class="number clickcard" id="pos_to_be_approved_ids" t-att-value="'%s' % (pos_to_be_approved_ids.get('records'))"><t t-esc="pos_to_be_approved_ids.get('count')"/></div>
+													<div class="card-name">Vendor invoices to be validated</div>
+												</div>
+												<div class="col-sm-9 col-md-6 cardfile">
+													<div class="number clickcard" id="pos_to_be_paid_ids" t-att-value="'%s' % (pos_to_be_paid_ids.get('records'))"><t t-esc="pos_to_be_paid_ids.get('count')"/></div>
+													<div class="card-name">Po to be Paid</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row mt-4 closeSb d-none" id="mmrTableDiv">
+								<div class="mycard col-12">
+									<div class="card">
+										<h1 class="text-bold">Monthly Management report <span id="reportYear"><t t-esc="datetime.datetime.now().strftime('%b')"/> - <t t-esc="datetime.datetime.now().strftime('%Y')"/></span></h1>
+										<span class="nav-item text-muted">Note: Values displayed here show with the current year. When Month and year filter is applied, it checks for all invoices period. </span>
+										<span class="nav-item text-muted">All Values are converted into Naira as at the conversion rate of the invoice date. </span>
+										<!-- <t t-esc="datetime.datetime.now().strftime('%Y')"/>  -->
+										<!-- <t t-esc="datetime.datetime.now().strftime('%B %d, %Y')"/></h1>  -->
+										<div class="table-responsive mt-2 border-hidden">
+											<table class="table mmr-table align-items-center mb-0">
+												<thead>
+													<tr id="mmr-tr">    
+													</tr>
+												</thead>
+												<tbody id="mmr-tbody">
+													
+												</tbody> 
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- WIP CONTENT -->
+							<div class="container-fluid p-4 closeSb d-none" id="wipTableDiv">
+								<!-- Dashboard Header -->
+								<div class="d-flex justify-content-between align-items-center mb-4">
+									<h1 class="h3_wip">Work In Progess</h1>
+									<!-- <button class="btn wip_btn-primary">Share</button> -->
+								</div>
+								
+								<!-- Filter Section -->
+								<!-- <div class="card p-3 mb-4">
+									<form class="row g-3">
+										<div class="col-md-1">
+											<label for="fileStatus" class="form-label">Activity</label>
+											<select id="fileStatus" class="form-select">
+												<option selected>All</option>
+												<option value="1">Open</option>
+												<option value="2">Closed</option>
+											</select>
+										</div>
+										<div class="col-md-1">
+											<label for="fileStatus" class="form-label">File Status</label>
+											<select id="fileStatus" class="form-select">
+												<option selected>All</option>
+												<option value="1">Open</option>
+												<option value="2">Closed</option>
+											</select>
+										</div>
+										<div class="col-md-1">
+											<label for="fileStatus" class="form-label">File Revenue Status</label>
+											<select id="fileStatus" class="form-select">
+												<option selected>All</option>
+												<option value="1">Open</option>
+												<option value="2">Closed</option>
+											</select>
+										</div>
+										<div class="col-md-1">
+											<label for="fileStatus" class="form-label">File Cost Status</label>
+											<select id="fileStatus" class="form-select">
+												<option selected>All</option>
+												<option value="1">Open</option>
+												<option value="2">Closed</option>
+											</select>
+										</div>
+										<div class="col-md-1">
+											<label for="year" class="form-label">Year</label>
+											<select id="year" class="form-select">
+												<option selected>All</option>
+												<option value="2024">2024</option>
+												<option value="2023">2023</option>
+											</select>
+										</div>
+										<div class="col-md-1">
+											<label for="date" class="form-label">Start Date</label>
+											<select id="date" class="form-select">
+												<option selected>All</option>
+												<option value="1">Open</option>
+												<option value="2">Closed</option>
+											</select>
+										</div>
+										<div class="col-md-1">
+											<label for="fileStatus" class="form-label">Closed Date</label>
+											<select id="fileStatus" class="form-select">
+												<option selected>All</option>
+												<option value="1">Open</option>
+												<option value="2">Closed</option>
+											</select>
+										</div>
+										<div class="col-md-1">
+											<label for="fileStatus" class="form-label">Project Name</label>
+											<select id="fileStatus" class="form-select">
+												<option selected>All</option>
+												<option value="1">Open</option>
+												<option value="2">Closed</option>
+											</select>
+										</div>
+										<div class="col-md-1">
+											<label for="fileStatus" class="form-label">File Number</label>
+											<select id="fileStatus" class="form-select">
+												<option selected>All</option>
+												<option value="1">Open</option>
+												<option value="2">Closed</option>
+											</select>
+										</div>
+										<div class="col-md-1">
+											<label for="fileStatus" class="form-label">Main Customer No.</label>
+											<select id="fileStatus" class="form-select">
+												<option selected>All</option>
+												<option value="1">Open</option>
+												<option value="2">Closed</option>
+											</select>
+										</div>
+										<div class="col-md-1">
+											<label for="fileStatus" class="form-label">(Target) Operation</label>
+											<select id="fileStatus" class="form-select">
+												<option selected>All</option>
+												<option value="1">Open</option>
+												<option value="2">Closed</option>
+											</select>
+										</div>
+									</form>
+								</div> -->
+
+								<!-- Dashboard Tables -->
+								<div class="row" style="height: 100%">
+									<!-- MMR Open File -->
+									<div class="col-md-3">
+										<div class="card">
+											<div class="wip-card-header text-white">
+												WIP Open File
+											</div>
+											<div class="card-body">
+												<table class="table table-bordered" style="width: 90%;">
+													<thead>
+														<tr>
+															<th class="bg-light">Group</th>
+															<th class="bg-light">Total</th>
+														</tr>
+													</thead>
+													<tbody id="tbody_wip_group">
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+
+									<!-- Open Files (WIP) -->
+									<div class="col-md-9">
+										<div class="row mb-5">
+											<div class="col-md-6 pr-2 pl-2">
+												<div class="card">
+													<div class="wip-card-header text-white">
+														Total WIP
+													</div>
+													<div class="card-body table-responsive">
+														<!-- <table class="table table-bordered" style="width: 70%;" id="total_wip"> -->
+														<!-- <table class="table table-bordered" style="width: 90%;"> -->
+														<table border="1" style="font-size:15px; width: 100%; border-collapse: collapse; margin-top: 10px; margin: 5px;">
+															<thead>
+																<tr class="bg-light">
+																	<th class="bg-light">Group</th>
+																	<th class="bg-light">WIP Revenue</th>
+																	<th class="bg-light">WIP Cost</th>
+																	<th class="bg-light">WIP Margin</th>
+																</tr>
+															</thead>
+															<tbody id="total_wip_body">
+																
+																<!-- <tr>
+																	<td><strong>Agency</strong></td>
+																	<td><strong>$1,647,278.17</strong></td>
+																	<td><strong>$1,215,474.73</strong></td>
+																	<td><strong>$431,803.44</strong></td>
+																</tr>
+																<tr>
+																	<td><strong>Total</strong></td>
+																	<td><strong>$1,647,278.17</strong></td>
+																	<td><strong>$1,215,474.73</strong></td>
+																	<td><strong>$431,803.44</strong></td>
+																</tr> -->
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-6 pr-2 pl-2">
+												<div class="card">
+													<div class="wip-card-header text-white">
+														WIP - Invoiced/Booked
+													</div>
+													<div class="card-body table-responsive">
+														<!-- <table class="table table-bordered" style="width: 70%;"> -->
+														<table border="1" style="font-size:15px; width: 100%; border-collapse: collapse; margin-top: 10px; margin: 5px;">
+															<thead>
+																<tr class="bg-light p-2">
+																	<th class="bg-light">Group</th>
+																	<th class="bg-light">WIP Revenue</th>
+																	<th class="bg-light">WIP Cost</th>
+																	<th class="bg-light">WIP Margin</th>
+																</tr>
+															</thead>
+															<tbody id="wip_booked_body">
+																<!-- <tr>
+																	<td class="bg-light">Agency</td>
+																	<td>$1,613,327.27</td>
+																	<td>$1,206,669.83</td>
+																	<td>$406,657.44</td>
+																</tr>
+																<tr>
+																	<td class="bg-light">transport</td>
+																	<td>$1,613,327.27</td>
+																	<td>$1,206,669.83</td>
+																	<td>$406,657.44</td>
+																</tr> -->
+																
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-6 pr-2 pl-2">
+												<div class="card">
+													<div class="wip-card-header text-white">
+														WIP - Paid
+													</div>
+													<div class="card-body table-responsive">
+														<!-- <table class="table table-bordered" style="width: 70%;"> -->
+														<table border="1" style="font-size:15px; width: 100%; border-collapse: collapse; margin-top: 10px; margin: 5px;">
+															<thead>
+																<tr class="bg-light">
+																	<th class="bg-light">Group</th>
+																	<th class="bg-light">WIP Revenue</th>
+																	<th class="bg-light">WIP Cost</th>
+																	<th class="bg-light">WIP Margin</th>
+																</tr>
+															</thead>
+															<tbody id="wip_paid_body">
+																<!-- <tr>
+																	<td class="bg-light">Agency</td>
+																	<td>$1,613,327.27</td>
+																	<td>$1,206,669.83</td>
+																	<td>$406,657.44</td>
+																</tr>
+																-->
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-6 pr-2 pl-2">
+												<div class="card">
+													<div class="wip-card-header text-white">
+														WIP - Balance
+													</div>
+													<div class="card-body table-responsive">
+														<table border="1" style="font-size:15px; width: 100%; border-collapse: collapse; margin-top: 10px; margin: 5px;">
+														<!-- <table class="table table-bordered" style="width: 70%;"> -->
+															<thead>
+																<tr class="bg-light">
+																	<th class="bg-light">Group</th>
+																	<th class="bg-light">WIP Revenue</th>
+																	<th class="bg-light">WIP Cost</th>
+																	<th class="bg-light">WIP Margin</th>
+																</tr>
+															</thead>
+															<tbody id="wip_balance_body">
+																<!-- <tr>
+																	<td class="bg-light">Agency</td>
+																	<td>$1,613,327.27</td>
+																	<td>$1,206,669.83</td>
+																	<td>$406,657.44</td>
+																</tr>
+																-->
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- <div class="row my-4 closeSb d-none" id="mmrTableDiv"> 
+								<div class="mycard col-12">
+									<div class="card">
+										<div class="card-header pb-0 mb-2">
+											<div class="row">
+												<div class="col-lg-6 col-7 mb-2">
+													<h6>Projects</h6>
+													<p class="text-sm mb-0">
+														<i class="fa fa-check text-info" aria-hidden="true"></i>
+														<span class="font-weight-bold ms-1">Table Analysis</span> 
+													</p>
+												</div>
+												<div class="col-lg-6 col-5 my-auto text-end mb-2">
+													<div class="dropdown float-lg-end pe-4">
+														<a class="cursor-pointer" id="dropdownTable2" data-bs-toggle="dropdown" aria-expanded="false">
+														<i class="fa fa-ellipsis-v text-secondary"></i>
+														</a> 
+														 
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="card-body px-0 pb-2 mt-0 pt-0">
+											<div class="table-responsive">
+												<table class="table align-items-center mb-0">
+													<thead>
+														<tr>
+														<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"></th>
+														<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project Name</th>
+														<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Customer</th>
+														<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Budget Revenue(NGN)</th>
+														<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Invoiced Revenue(NGN)</th>
+														<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Invoiced Revenue(USD)</th>
+														</tr>
+													</thead>
+													<tbody id="mmr_table_customer_info_id">
+														<t t-foreach="group_project_table" t-as="rec">
+															<tr>
+																<td class="text-sm">
+																	<span class="text-xs font-weight-bold"><t t-esc="rec.get('count')"/></span>
+																</td>
+																<td class="text-sm">
+																	<span class="text-xs font-weight-bold"><t t-esc="rec.get('project_name')"/></span>
+																</td>
+																<td class="align-middle text-center text-sm">
+																	<span class="text-xs font-weight-bold"><t t-esc="rec.get('customer_name')"/></span>
+																</td>
+																<td class="align-middle text-center text-sm">
+																	<span class="text-xs font-weight-bold"><t t-esc="'{0:,}'.format(rec.get('ng_budget_total'))"/></span>
+																</td>
+																<td class="align-middle text-center text-sm">
+																	<span class="text-xs font-weight-bold"><t t-esc="'{0:,}'.format(rec.get('ng_revenue_total'))"/></span>
+																</td>
+																<td class="align-middle text-center text-sm">
+																	<span class="text-xs font-weight-bold"><t t-esc="'{0:,}'.format(rec.get('usd_revenue_total'))"/></span>
+																</td> 
+															</tr>
+														</t> 
+														<div class="mt-5 mb-5">
+															<td class="">
+																<span class="font-weight-bold"></span>
+															</td>
+															<td class="">
+																<span class="font-weight-bold"></span>
+															</td>
+															<td class="">
+																<span class="font-weight-bold">Grand Total</span>
+															</td>
+
+															
+															<td class="">
+																<span class="font-weight-bold">NGN <t t-esc="'{0:,}'.format(sum([rec.get('ng_budget_total') for rec in group_project_table]))"/></span>
+															</td>
+															<td class="">
+																<span class="font-weight-bold">NGN <t t-esc="'{0:,}'.format(sum([rec.get('ng_revenue_total') for rec in group_project_table]))"/></span>
+															</td>
+															<td class="">
+																<span class="font-weight-bold">USD <t t-esc="'{0:,}'.format(sum([rec.get('usd_revenue_total') for rec in group_project_table]))"/></span>
+															</td>
+														</div>
+													</tbody> 
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div> -->
+
+							<!-- FRAME AGREEMENT -->
+							<div class="row mt-4 closeSb d-none" id="frameAgreementDiv">
+								<div class="col-chart col-12">
+									<div class="row agreement-card" id="frame_agreement_card">
+										<div class="col-6 py-3 ps-0">
+											<div class="d-flex mb-2">
+												<div class="icon icon-shape icon-xxs shadow border-radius-sm bg-gradient-primary text-center me-2 d-flex align-items-center justify-content-center">
+													<svg width="10px" height="10px" viewBox="0 0 40 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+														<title>Frame Agreement</title>
+														<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+															<g transform="translate(-1870.000000, -591.000000)" fill="#FFFFFF" fill-rule="nonzero">
+																<g transform="translate(1716.000000, 291.000000)">
+																	<g transform="translate(154.000000, 300.000000)">
+																	<path class="color-background" d="M40,40 L36.3636364,40 L36.3636364,3.63636364 L5.45454545,3.63636364 L5.45454545,0 L38.1818182,0 C39.1854545,0 40,0.814545455 40,1.81818182 L40,40 Z" opacity="0.603585379"></path>
+																	<path class="color-background" d="M30.9090909,7.27272727 L1.81818182,7.27272727 C0.814545455,7.27272727 0,8.08727273 0,9.09090909 L0,41.8181818 C0,42.8218182 0.814545455,43.6363636 1.81818182,43.6363636 L30.9090909,43.6363636 C31.9127273,43.6363636 32.7272727,42.8218182 32.7272727,41.8181818 L32.7272727,9.09090909 C32.7272727,8.08727273 31.9127273,7.27272727 30.9090909,7.27272727 Z M18.1818182,34.5454545 L7.27272727,34.5454545 L7.27272727,30.9090909 L18.1818182,30.9090909 L18.1818182,34.5454545 Z M25.4545455,27.2727273 L7.27272727,27.2727273 L7.27272727,23.6363636 L25.4545455,23.6363636 L25.4545455,27.2727273 Z M25.4545455,20 L7.27272727,20 L7.27272727,16.3636364 L25.4545455,16.3636364 L25.4545455,20 Z"></path>
+																	</g>
+																</g>
+															</g>
+														</g>
+													</svg>
+												</div>
+												<p class="text-xs mt-1 mb-0 font-weight-bold">Frame Agreement: All USD currency value is computed to the Invoice currency rate at the order date period</p>
+											</div>
+											<canvas id="guageChartCanvas"></canvas> 
+
+											<div class="form-group container-fluid py-1 px-3">
+												<div class="col-md-12">
+													
+													<div class="form-check form-check-inline">
+														<label class="form-check-label" for="option2">Invoices: <span id="invoice_percentage">0</span> %</label>
+														<p class="font-weight-bold"><h3 class="" id="fr_invoice_text"></h3></p>
+													</div>
+													<div class="form-check form-check-inline">
+														<label class="form-check-label" for="option2">Max Budget: <span id="budget_percentage">0</span> %</label>
+														<p class="font-weight-bold"><h3 class="" id="fr_budget_text"></h3></p>
+													</div> 
+												</div>
+											</div>
+											<div class="progress w-75">
+												<div class="progress-bar bg-dark w-60" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+										</div>
+
+										<div class="col-6 py-3 ps-0 d-none">
+											<div class="d-flex mb-2">
+												<div class="icon icon-shape icon-xxs shadow border-radius-sm bg-gradient-primary text-center me-2 d-flex align-items-center justify-content-center">
+													<svg width="10px" height="10px" viewBox="0 0 40 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+														<title>Frame Agreement</title>
+														<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+															<g transform="translate(-1870.000000, -591.000000)" fill="#FFFFFF" fill-rule="nonzero">
+																<g transform="translate(1716.000000, 291.000000)">
+																	<g transform="translate(154.000000, 300.000000)">
+																	<path class="color-background" d="M40,40 L36.3636364,40 L36.3636364,3.63636364 L5.45454545,3.63636364 L5.45454545,0 L38.1818182,0 C39.1854545,0 40,0.814545455 40,1.81818182 L40,40 Z" opacity="0.603585379"></path>
+																	<path class="color-background" d="M30.9090909,7.27272727 L1.81818182,7.27272727 C0.814545455,7.27272727 0,8.08727273 0,9.09090909 L0,41.8181818 C0,42.8218182 0.814545455,43.6363636 1.81818182,43.6363636 L30.9090909,43.6363636 C31.9127273,43.6363636 32.7272727,42.8218182 32.7272727,41.8181818 L32.7272727,9.09090909 C32.7272727,8.08727273 31.9127273,7.27272727 30.9090909,7.27272727 Z M18.1818182,34.5454545 L7.27272727,34.5454545 L7.27272727,30.9090909 L18.1818182,30.9090909 L18.1818182,34.5454545 Z M25.4545455,27.2727273 L7.27272727,27.2727273 L7.27272727,23.6363636 L25.4545455,23.6363636 L25.4545455,27.2727273 Z M25.4545455,20 L7.27272727,20 L7.27272727,16.3636364 L25.4545455,16.3636364 L25.4545455,20 Z"></path>
+																	</g>
+																</g>
+															</g>
+														</g>
+													</svg>
+												</div>
+												<p class="text-xs mt-1 mb-0 font-weight-bold">Frame Agreement: All USD currency value is computed to the Invoice currency rate at the order date period</p>
+											</div>
+											<canvas id="guageChartCanvasTick"></canvas> 
+											<div class="progress w-75">
+												<div class="progress-bar bg-dark w-60" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<footer class="footer pt-3 closeSb">
+								<div class="container-fluid">
+									<div class="row align-items-center justify-content-lg-between">
+										<div class="col-lg-6 mb-lg-0 mb-4">
+											<div class="copyright text-center text-sm text-muted text-lg-start">
+												© <script>
+												document.write(new Date().getFullYear())
+												</script>,
+												made with <i class="fa fa-heart"></i> by
+												<a href="/" class="font-weight-bold" target="_blank">GS</a>
+												for a better Analysis.
+											</div>
+										</div>
+										<div class="col-lg-6">
+											<ul class="nav nav-footer justify-content-center justify-content-lg-end">
+												<li class="nav-item">
+												<a href="#" class="nav-link text-muted" target="_blank">Growth Stack</a>
+												</li>
+												<li class="nav-item">
+												<a href="/" class="nav-link text-muted" target="_blank">About Us</a>
+												</li>
+												<li class="nav-item">
+												<a href="/" class="nav-link text-muted" target="_blank">Team</a>
+												</li>
+												<li class="nav-item">
+												<a href="/" class="nav-link pe-0 text-muted" target="_blank">License</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</footer>
+						</div>
+					<!-- </main>  -->
+				</div>
+			</t>
+		</template>
+	</data>
+</odoo>

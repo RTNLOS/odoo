@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+  <t t-name="warehousing_system.WarehouseDashboard" owl="1">
+    <div class="warehouse-dashboard-container">
+      <!-- Top Navigation Bar -->
+      <div class="topbar">
+        <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl">
+          <div class="container-fluid py-1 px-3">
+            <div class="form-group">
+              <div class="form-check form-check-inline">
+                <!-- App Drawer Icon - Moved outside breadcrumb -->
+                <i class="app-drawer-icon fa fa-th text-lg opacity-10" 
+                   aria-hidden="true" 
+                   t-on-click="openAppDrawer"
+                   title="Applications"></i>
+                
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+                    <!-- Hamburger Menu Icon -->
+                    <li class="breadcrumb-item">
+                      <i id="opennavbtn" class="opennavbtn fa fa-bars text-lg opacity-10" aria-hidden="true" t-on-click="toggleSidebar"></i> 
+                      <i id="closenavbtn" class="closenavbtn closeSb fa fa-bars text-lg opacity-10 d-none" aria-hidden="true" t-on-click="toggleSidebar"></i>
+                    </li>
+                  </ol>
+                </nav>
+              </div>
+            </div>
+            
+            <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-2">
+              <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+                <h1 class="mb-0">Red Transport Nigeria Warehouse Management System</h1>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+
+      <!-- Main Content Container -->
+      <div class="main-content-wrapper" t-att-class="state.sidebarOpen ? 'sidebar-open' : 'sidebar-closed'">
+        
+        <!-- Sidebar -->
+        <div class="sidebar" id="mysidebar" t-att-class="state.sidebarOpen ? 'sidebar-visible' : 'sidebar-hidden'">
+          <div class="sidebar-header">
+            <h4>Warehousing Menu</h4>
+          </div>
+          <ul class="sidebar-menu">
+            <li class="menu-item" t-on-click="handleDashboardClick">
+              <a href="#">
+                <i class="fa fa-th-large"></i>
+                <div>Dashboard</div>
+              </a>
+            </li>
+            <li class="menu-item" t-on-click="handleReceiptsClick">
+              <a href="#">
+                <i class="fa fa-inbox"></i>
+                <div>Warehouse Receipts</div>
+              </a>
+            </li>
+            <li class="menu-item" t-on-click="handleDispatchClick">
+              <a href="#">
+                <i class="fa fa-truck"></i>
+                <div>Warehouse Dispatch</div>
+              </a>
+            </li>
+            <li class="menu-item" t-on-click="handleReportingClick">
+              <a href="#">
+                <i class="fa fa-file"></i>
+                <div>Stock Reporting</div>
+              </a>
+            </li>
+            
+            <!-- Expandable Warehouse Setup Menu -->
+            <li class="menu-item expandable-menu" t-att-class="state.warehouseSetupExpanded ? 'expanded' : ''">
+              <a href="#" t-on-click="() => this.toggleWarehouseSetup()">
+                <i class="fa fa-cog"></i>
+                <div>Warehouse Setup</div>
+                <i class="fa fa-chevron-down expand-icon" t-att-class="state.warehouseSetupExpanded ? 'rotated' : ''"></i>
+              </a>
+              <ul class="submenu" t-att-class="state.warehouseSetupExpanded ? 'submenu-visible' : 'submenu-hidden'">
+                <li class="submenu-item" t-on-click="() => this.navigateToWarehouses()">
+                  <a href="#">
+                    <i class="fa fa-archive"></i>
+                    <div>Warehouses</div>
+                  </a>
+                </li>
+                <li class="submenu-item" t-on-click="() => this.navigateToLocations()">
+                  <a href="#">
+                    <i class="fa fa-map-marker"></i>
+                    <div>Locations</div>
+                  </a>
+                </li>
+                <li class="submenu-item" t-on-click="() => this.navigateToOperationalTypes()">
+                  <a href="#">
+                    <i class="fa fa-list-alt"></i>
+                    <div>Operational Types</div>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Main Dashboard Content -->
+        <div class="dashboard-content" t-att-class="state.sidebarOpen ? 'content-with-sidebar' : 'content-full-width'">
+          <div class="container-fluid px-4">
+            
+            <!-- Logo Section -->
+            <div class="logo-section">
+              <div class="logo-container">
+                <!-- Application Logo (Left side) -->
+                <img t-att-src="'warehousing_system/static/img/reddit_logo_v3.jpg'" 
+                     alt="Application Logo"
+                     class="logo-image app-logo"/>
+                
+                <!-- Company Logo (Right side) -->
+                <t t-if="state.companyLogo">
+                  <img t-att-src="state.companyLogo" 
+                       alt="Company Logo"
+                       class="logo-image company-logo"/>
+                </t>
+              </div>
+            </div>
+            
+            <!-- Dashboard Filters -->
+            <div class="dashboard-filters mb-4">
+              <div class="row">
+                <div class="col">
+                  <label>Client</label>
+                  <input type="text" class="form-control" t-att-value="state.filters.client" 
+                         placeholder="Search by client name" 
+                         t-on-input="(ev) => this.onFilterChange(ev, 'client')" />
+                </div>
+                <div class="col">
+                  <label>Vessel</label>
+                  <input type="text" class="form-control" t-att-value="state.filters.vessel" 
+                         placeholder="Search by vessel" 
+                         t-on-input="(ev) => this.onFilterChange(ev, 'vessel')" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Dashboard Cards -->
+            <div class="dashboard-cards">
+              <div class="col-card" t-on-click="() => this.onCardClick('action_view_total_inventory_item', 'totalInventoryItem', 'Total Inventory Item')">
+                <div class="warehouse-card red-card">
+                  <div class="card-icon"><i class="fa fa-info-circle"/></div>
+                  <div class="card-count"><t t-esc="state.stats.totalInventoryItem"/></div>
+                  <div class="card-title">Total Inventory Items</div>
+                </div>
+              </div>
+
+              <div class="col-card" t-on-click="() => this.onCardClick('action_view_expected_today', 'expectedToday', 'Inventory Items Expected Today')">
+                <div class="warehouse-card red-card">
+                  <div class="card-icon"><i class="fa fa-clock-o"/></div>
+                  <div class="card-count"><t t-esc="state.stats.expectedToday"/></div>
+                  <div class="card-title">Inventory Items Expected Today</div>
+                </div>
+              </div>
+
+              <div class="col-card" t-on-click="() => this.onCardClick('action_view_expected_tomorrow', 'expectedTomorrow', 'Inventory Items Expected Tomorrow')">
+                <div class="warehouse-card red-card">
+                  <div class="card-icon"><i class="fa fa-hourglass-half"/></div>
+                  <div class="card-count"><t t-esc="state.stats.expectedTomorrow"/></div>
+                  <div class="card-title">Inventory Items Expected Later</div>
+                </div>
+              </div>
+
+              <div class="col-card" t-on-click="() => this.onCardClick('action_view_to_put_in_stock', 'toBePutInStock', 'Items to be Put in Stock')">
+                <div class="warehouse-card red-card">
+                  <div class="card-icon"><i class="fa fa-cart-plus"/></div>
+                  <div class="card-count"><t t-esc="state.stats.toBePutInStock"/></div>
+                  <div class="card-title">Items to be Put in Stock</div>
+                </div>
+              </div>
+
+              <div class="col-card" t-on-click="() => this.onCardClick('action_view_without_allocated_storage', 'withoutAllocatedStorage', 'Inventory Items without Allocated Storage')">
+                <div class="warehouse-card red-card">
+                  <div class="card-icon"><i class="fa fa-ban"/></div>
+                  <div class="card-count"><t t-esc="state.stats.withoutAllocatedStorage"/></div>
+                  <div class="card-title">Inventory Items without Allocated Storage</div>
+                </div>
+              </div>
+
+              <div class="col-card" t-on-click="() => this.onCardClick('action_view_labels_to_print', 'labelsToBePrinted', 'Labels to be Printed')">
+                <div class="warehouse-card red-card">
+                  <div class="card-icon"><i class="fa fa-print"/></div>
+                  <div class="card-count"><t t-esc="state.stats.labelsToBePrinted"/></div>
+                  <div class="card-title">Labels to be Printed</div>
+                </div>
+              </div>
+
+              <div class="col-card" t-on-click="() => this.onCardClick('action_view_long_term_stock', 'longerThan90Days', 'Inventory Items >90 Days in Stock')">
+                <div class="warehouse-card red-card">
+                  <div class="card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 32 32"
+                        width="32" height="32">
+                      <path d="M0 0 C1.98 0 3.96 0 6 0 C6.33 0.99 6.66 1.98 7 3 C8.11375 2.95875 9.2275 2.9175 10.375 2.875 C14 3 14 3 16 5 C16.125 8.625 16.125 8.625 16 12 C16.99 12.33 17.98 12.66 19 13 C19 14.98 19 16.96 19 19 C18.01 19.33 17.02 19.66 16 20 C16.04125 21.11375 16.0825 22.2275 16.125 23.375 C16 27 16 27 14 29 C10.375 29.125 10.375 29.125 7 29 C6.67 29.99 6.34 30.98 6 32 C4.02 32 2.04 32 0 32 C-0.33 31.01 -0.66 30.02 -1 29 C-2.670625 29.061875 -2.670625 29.061875 -4.375 29.125 C-8 29 -8 29 -10 27 C-10.125 23.375 -10.125 23.375 -10 20 C-10.99 19.67 -11.98 19.34 -13 19 C-13 17.02 -13 15.04 -13 13 C-12.01 12.67 -11.02 12.34 -10 12 C-10.04125 10.88625 -10.0825 9.7725 -10.125 8.625 C-10 5 -10 5 -8 3 C-4.375 2.875 -4.375 2.875 -1 3 C-0.67 2.01 -0.34 1.02 0 0 Z M-3 10 C-5.06196218 12.2140989 -5.06196218 12.2140989 -6 15 C-5.23960803 18.80195984 -4.23036592 21.72677954 -1 24 C2.17695135 25.17045576 3.48883261 25.21907174 6.625 23.875 C9.34712589 21.72595325 10.72105706 20.23497332 12 17 C11.23960803 13.19804016 10.23036592 10.27322046 7 8 C2.67106404 6.40512886 0.56928197 7.18214581 -3 10 Z"
+                            fill="#C4001E" transform="translate(13,0)"/>
+                      <path d="M0 0 C0.99 0.33 1.98 0.66 3 1 C3.33 3.64 3.66 6.28 4 9 C0.125 8.125 0.125 8.125 -1 7 C-1.125 4 -1.125 4 -1 1 C-0.67 0.67 -0.34 0.34 0 0 Z"
+                            fill="#C20019" transform="translate(15,10)"/>
+                    </svg>
+                  </div>
+                  <div class="card-count"><t t-esc="state.stats.longerThan90Days"/></div>
+                  <div class="card-title">Inventory Items &gt;90 Days in Stock</div>
+                </div>
+              </div>
+
+              <div class="col-card" t-on-click="() => this.onCardClick('action_view_open_osd_inventory', 'openOSDInventory', 'Open OS&amp;D Inventory in Stock')">
+                <div class="warehouse-card red-card">
+                  <div class="card-icon"><i class="fa fa-unlock-alt"/></div>
+                  <div class="card-count"><t t-esc="state.stats.openOSDInventory"/></div>
+                  <div class="card-title">Open OS&amp;D Inventory in Stock</div>
+                </div>
+              </div>
+
+              <div class="col-card" t-on-click="() => this.onCardClick('action_view_critical_stock_items', 'criticalStockItems', 'Critical Items in Stock')">
+                <div class="warehouse-card red-card">
+                  <div class="card-icon"><i class="fa fa-exclamation-triangle"/></div>
+                  <div class="card-count"><t t-esc="state.stats.criticalStockItems"/></div>
+                  <div class="card-title">Critical Items in Stock</div>
+                </div>
+              </div>
+
+              <div class="col-card" t-on-click="() => this.onCardClick('action_view_dangerous_goods', 'dangerousGoods', 'Dangerous Goods')">
+                <div class="warehouse-card red-card">
+                  <div class="card-icon">
+                    <img t-att-src="'warehousing_system/static/img/danger.png'" 
+                      alt="Dangerous Goods"
+                      class="card-icon-img"/>
+                  </div>
+                  <div class="card-count"><t t-esc="state.stats.dangerousGoods"/></div>
+                  <div class="card-title">Dangerous Goods</div>
+                </div>
+              </div>
+
+              <div class="col-card" t-on-click="() => this.onCardClick('action_view_temperature_sensitive', 'temperatureSensitive', 'Temperature Sensitive')">
+                <div class="warehouse-card red-card">
+                  <div class="card-icon"><i class="fa fa-thermometer-half"/></div>
+                  <div class="card-count"><t t-esc="state.stats.temperatureSensitive"/></div>
+                  <div class="card-title">Temperature Sensitive</div>
+                </div>
+              </div>
+              
+              <div class="col-card" t-on-click="() => this.onCardClick('action_view_pending_dispatched', 'PendingdispatchedItems', 'Inventory Items Pending Dispatched')">
+                <div class="warehouse-card red-card">
+                  <div class="card-icon"><i class="fa fa-truck"/></div>
+                  <div class="card-count"><t t-esc="state.stats.PendingdispatchedItems"/></div>
+                  <div class="card-title">Inventory Items Pending Dispatch</div>
+                </div>
+              </div>
+
+              <div class="col-card" t-on-click="() => this.onCardClick('action_view_main_warehouse_utilization', 'mainWarehouseUtilization', 'Main Warehouse Utilization')">
+                <div class="warehouse-card blue-card">
+                  <div class="card-icon">
+                    <img t-att-src="'warehousing_system/static/img/space-utilization.png'" 
+                      alt="Main Warehouse Utilization"
+                      class="card-icon-img"/>
+                  </div>
+                  <div class="card-count"><t t-esc="state.stats.mainWarehouseUtilization"/>m²</div>
+                  <div class="card-title">Main Warehouse Utilization</div>
+                </div>
+              </div>
+
+              <div class="col-card" t-on-click="() => this.onCardClick('action_view_bonded_warehouse_utilization', 'bondedWarehouseUtilization', 'Bonded Warehouse Utilization')">
+                <div class="warehouse-card blue-card">
+                  <div class="card-icon">
+                    <img t-att-src="'warehousing_system/static/img/space-utilization.png'" 
+                      alt="Bonded Warehouse Utitlization"
+                      class="card-icon-img"/>
+                  </div>
+                  <div class="card-count"><t t-esc="state.stats.bondedWarehouseUtilization"/>m²</div>
+                  <div class="card-title">Bonded Warehouse Utilization</div>
+                </div>
+              </div>
+
+              <div class="col-card" t-on-click="() => this.onCardClick('action_view_covered_stacking_utilization', 'coveredStackingUtilization', 'Covered Stacking Area Utilization')">
+                <div class="warehouse-card blue-card">
+                  <div class="card-icon">
+                    <img t-att-src="'warehousing_system/static/img/space-utilization.png'" 
+                      alt="Covered Sacking utilization"
+                      class="card-icon-img"/>
+                  </div>
+                  <div class="card-count"><t t-esc="state.stats.coveredStackingUtilization"/>m²</div>
+                  <div class="card-title">Covered Stacking Area Utilization</div>
+                </div>
+              </div>
+
+              <div class="col-card" t-on-click="() => this.onCardClick('action_view_open_stacking_utilization', 'openStackingUtilization', 'Open Stacking Area Utilization')">
+                <div class="warehouse-card blue-card">
+                  <div class="card-icon">
+                    <img t-att-src="'warehousing_system/static/img/space-utilization.png'" 
+                      alt="Open Stacking Utilization"
+                      class="card-icon-img"/>
+                  </div>
+                  <div class="card-count"><t t-esc="state.stats.openStackingUtilization"/>m²</div>
+                  <div class="card-title">Open Stacking Area Utilization</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </t>
+</templates>

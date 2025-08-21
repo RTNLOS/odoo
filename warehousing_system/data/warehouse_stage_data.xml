@@ -1,0 +1,70 @@
+<odoo>
+    <data noupdate="1">
+      <record id="mtype_warehouse" model="memo.type">
+        <field name="name">Warehouse</field>
+        <field name="memo_key">warehouse</field>
+        <field name="active">1</field>
+      </record>
+  
+      <record id="memo_stage_warehouse_1" model="memo.stage">
+        <field name="name">Draft</field>
+        <field name="sequence">10</field>
+        <field name="publish_on_dashboard">1</field>
+        <field name="active">1</field>
+      </record>
+      <record id="memo_stage_warehouse_2" model="memo.stage">
+        <field name="name">Arrived</field>
+        <field name="sequence">20</field>
+        <field name="publish_on_dashboard">1</field>
+        <field name="active">1</field>
+      </record>
+      <record id="memo_stage_warehouse_3" model="memo.stage">
+        <field name="name">Allocated</field>
+        <field name="sequence">30</field>
+        <field name="publish_on_dashboard">1</field>
+        <field name="active">1</field>
+      </record>
+      <record id="memo_stage_warehouse_4" model="memo.stage">
+        <field name="name">Shipped</field>
+        <field name="sequence">40</field>
+        <field name="publish_on_dashboard">1</field>
+        <field name="active">1</field>
+      </record>
+      <record id="memo_stage_warehouse_5" model="memo.stage">
+        <field name="name">Cancelled</field>
+        <field name="sequence">50</field>
+        <field name="publish_on_dashboard">0</field>
+        <field name="active">1</field>
+      </record>
+  
+      <record id="memo_config_warehouse" model="memo.config">
+        <field name="memo_type" ref="warehousing_system.mtype_warehouse"/>
+        <field name="active">1</field>
+        <field name="department_id" ref="hr.dep_administration"/>
+        <field name="stage_ids" eval="[
+            (4, ref('warehousing_system.memo_stage_warehouse_1')),
+            (4, ref('warehousing_system.memo_stage_warehouse_2')),
+            (4, ref('warehousing_system.memo_stage_warehouse_3')),
+            (4, ref('warehousing_system.memo_stage_warehouse_4')),
+            (4, ref('warehousing_system.memo_stage_warehouse_5')),
+        ]"/>
+      </record>
+  
+      <record id="memo_stage_warehouse_1" model="memo.stage">
+        <field name="memo_config_id" ref="warehousing_system.memo_config_warehouse"/>
+      </record>
+      <record id="memo_stage_warehouse_2" model="memo.stage">
+        <field name="memo_config_id" ref="warehousing_system.memo_config_warehouse"/>
+      </record>
+      <record id="memo_stage_warehouse_3" model="memo.stage">
+        <field name="memo_config_id" ref="warehousing_system.memo_config_warehouse"/>
+      </record>
+      <record id="memo_stage_warehouse_4" model="memo.stage">
+        <field name="memo_config_id" ref="warehousing_system.memo_config_warehouse"/>
+      </record>
+      <record id="memo_stage_warehouse_5" model="memo.stage">
+        <field name="memo_config_id" ref="warehousing_system.memo_config_warehouse"/>
+      </record>
+    </data>
+  </odoo>
+  

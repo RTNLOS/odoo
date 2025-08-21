@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <record id="view_stock_move_operations_form_extend" model="ir.ui.view">
+      <field name="name">stock.move.operations.form.extend</field>
+      <field name="model">stock.move</field>
+      <field name="inherit_id" ref="stock.view_stock_move_operations"/>
+      <field name="arch" type="xml">
+        <xpath expr="//form/group[1]" position="replace">
+          <group name="item_details">
+            <group string="">
+              <!-- <field name="product_id"/> -->
+               <field name="warehouse_id" invisible="1" />
+              <field name="product_id"
+                     context="{'filter_customer_id': restrict_partner_id, 
+                              'filter_location_id': location_id,
+                              'filter_dest_location_id': location_dest_id,
+                              'filter_picking_code': context.get('picking_type_code'),
+                              'filter_warehouse_id': warehouse_id,
+                              'default_detailed_type': 'product'
+                              }"
+                     options="{'no_create': False, 'no_create_edit': False}"
+                     domain="[('detailed_type', '=', 'product')]"/>
+              <field name="product_uom_qty" string="Quantity"/>
+              <field name="product_uom"/>
+              <field name="description_picking" string="Item Description" invisible="picking_code not in ['outgoing']"/>
+            </group>
+             <group string="">
+                <field name="item_picture" widget="image" class="oe_avatar"/>
+                <field name="restrict_partner_id" string="Customer Reference"/>
+                <field name="po_number_supplier" invisible="picking_code == 'outgoing'" placeholder="e.g PO012992"/>
+                <field name="product_qty" string="Amount of Items per package" invisible="1"/>
+                <field name="remaining_qty" invisible="picking_code not in ['outgoing']" />
+                <field name="balance_qty" invisible="picking_code not in ['outgoing']" />
+                <field name="location_dest_id"  string="Default Destination" invisible="picking_code not in ['outgoing']"/>
+            </group>
+            <group string="Classification" invisible="picking_code not in ['incoming']">
+              <field name="description_picking" string="Item Description"/>
+              <field name="item_classification_critical"/>
+              <field name="item_classification_temperature"/>
+              <label for="item_classification_dangerous" string="Dangerous Goods"/>
+              <div class="o_checkbox_optional_field">
+                <field name="item_classification_dangerous" nolabel="1"/>
+                <div invisible="not item_classification_dangerous">
+                  <field name="dangerous_goods_class" nolabel="1" class="oe_inline" placeholder="Class of Dangerous Goods"/>
+                </div>
+              </div>
+              <field name="length_mtr" string="Lenght(m)"/>
+              <field name="width_mtr" string="Width(m)"/>
+              <field name="height_mtr" string="Height(m)" invisible="0"/>
+              <!-- <field name="item_value" string="Items Value"/> -->
+            </group>
+            <group string="Packaging and Weight" invisible="picking_code not in ['incoming']">
+              <field name="weight_kg" string="Weight(kg)" />
+              <field name="area_m2" string="Area(m2)" />
+              <field name="volume_m3" string="Volume(m3)" />
+              <field name="area_chargeable" string="Area Chargeable(m2)" />
+            </group>
+            <notebook>
+
+            </notebook>
+          </group>
+        </xpath>
+        <xpath expr="//field[@name='move_line_ids']" position="after">
+            <notebook>
+              <page name="attachment" string="Attachments">
+                <field name="attachment_ids" string="Attachment" domain="[('id', '=', None)]" context="{'default_res_model': 'stock.move', 'default_res_id': active_id, 'default_public': True}">
+                    <tree string="Attachment">
+                        <field name="name" string="Document Name"/> 
+                        <field name="datas" filename="name" string="File"/>
+                    </tree>
+                    <form string="Attachment">
+                        <group>
+                            <group>
+                                <field name="name" string="Document Name"/> 
+                            </group>
+                            <group>
+                                <field name="datas" filename="name" string="File"/>
+                            </group>
+                        </group>
+                    </form>
+                </field>
+              </page>
+            </notebook>
+        </xpath>
+      </field>
+    </record>
+
+    <record id="view_stock_move_tree_custom" model="ir.ui.view">
+            <field name="name">stock.move.tree.custom</field>
+            <field name="model">stock.move</field>
+            <field name="arch" type="xml">
+                <tree string="Stock Items" decoration-muted="state == 'cancel' or (state == 'done' and is_locked == True)">
+                    
+                    <field name="is_locked" column_invisible="True"/>
+
+                    <field name="product_id" required="1"/>
+                    <field name="description_picking" string="Description"/>
+                    
+                    <field name="picking_id" string="Inventory Record"/>
+                    <field name="state"/>
+                    
+                    <field name="product_uom_qty" string="Quantity"/>
+                    <field name="product_uom" string="Unit"/>
+
+                    <field name="item_classification_critical" optional="show"/>
+                    <field name="item_classification_dangerous" optional="show"/>
+                    <field name="item_classification_temperature" optional="show"/>
+                    
+                    <field name="location_id" optional="show"/>
+                    <field name="location_dest_id" optional="show"/>
+
+                    <button name="action_open_picking" string="View Picking" type="object" class="btn-secondary"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_stock_move_tree_view" model="ir.actions.act_window">
+            <field name="name">Stock Items</field>
+            <field name="res_model">stock.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_stock_move_tree_custom"/>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No stock items found.
+                </p>
+            </field>
+        </record>
+
+    <!-- <record id="view_stock_move_line_warehousing_tree_extend" model="ir.ui.view">
+      <field name="name">stock.move.line.tree.extend</field>
+      <field name="model">stock.move.line</field>
+      <field name="inherit_id" ref="stock.view_stock_move_line_detailed_operation_tree"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='location_id']" position="attributes">
+          <attribute name="string">Pick From</attribute>
+          <attribute name="modifiers">{'readonly': [('picking_type_id.code','!=','outgoing')]}</attribute>
+        </xpath>
+        <xpath expr="//field[@name='location_dest_id']" position="attributes">
+          <attribute name="modifiers">{'invisible': [('picking_type_id.code','=','incoming')]}</attribute>
+        </xpath>
+      </field>
+    </record> -->
+
+    <!-- <record id="view_stock_move_form_dispatch_override" model="ir.ui.view">
+        <field name="name">stock.move.form.dispatch.override</field>
+        <field name="model">stock.move</field>
+        <field name="inherit_id" ref="stock.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='location_id']" position="attributes">
+                <attribute name="string">Pick From</attribute>
+                <attribute name="modifiers">
+                    {'readonly': [('picking_type_id.code','!=','outgoing')]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='location_dest_id']" position="attributes">
+                <attribute name="modifiers">
+                    {'invisible': [('picking_type_id.code','=','outgoing')]}
+                </attribute>
+            </xpath>
+        </field>
+    </record> -->
+
+    <record id="uom_uom_form_view_inherit_make_type_editable" model="ir.ui.view">
+      <field name="name">uom.uom.form.inherit.editable.type</field>
+      <field name="model">uom.uom</field>
+      <field name="inherit_id" ref="uom.product_uom_form_view"/>
+      <field name="arch" type="xml">
+          <xpath expr="//field[@name='uom_type']" position="attributes">
+              <attribute name="readonly">0</attribute>
+          </xpath>
+      </field>
+  </record>
+
+
+    <record id="view_stock_move_operations_tree_extend" model="ir.ui.view">
+      <field name="name">stock.move.operations.tree.extend</field>
+      <field name="model">stock.move.line</field>
+      <field name="inherit_id" ref="stock.view_stock_move_line_operation_tree"/>
+      <field name="arch" type="xml">
+          <xpath expr="//field[@name='owner_id']" position="replace">
+              <field name="owner_id" column_invisible="1"/>
+              <field name="picking_code" column_invisible="1"/>
+              <field name="length_mtr" string="Length(m)"/>
+              <field name="width_mtr" string="Width(m)"/>
+              <field name="height_mtr" string="Height(m)"/>
+              <field name="area_m2"/>
+              <field name="volume_m3"/>
+              <field name="weight_per_item"/>
+              <!-- <field name="item_value"/> -->
+          </xpath>
+          <xpath expr="//field[@name='product_uom_id']" position="attributes">
+            <attribute name="column_invisible">True</attribute>
+            <attribute name="invisible">True</attribute>
+        </xpath>
+      </field>
+  </record>
+
+  </data>
+</odoo>

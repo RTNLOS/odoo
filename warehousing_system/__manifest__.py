@@ -1,0 +1,41 @@
+
+{
+    'name': "Warehousing Module",
+    'version': '1.0',
+    'category': 'Inventory',
+    'sequence': 3,
+    'summary': 'Used to manage warehouse',
+    'depends': ['base', 'contacts', 'stock', 'purchase', 'web', 'company_memo', 'mail', 'product'],
+    'author': '',
+    'data': [ 
+        # 'security/ir.model.access.csv',
+        'security/warehouse_security.xml',
+        'views/trucking_view.xml',
+        'data/warehouse_stage_data.xml',
+        'data/memo_type_warehouse.xml',
+        'views/financial_file_views.xml',
+        'views/stock_move_operations_views.xml',
+        'views/stock_picking_views.xml',
+        # 'static/src/xml/origin_autocomplete.xml',
+        'views/inventory_views.xml',
+        'views/warehouse_dashboard_menu.xml',
+        'report/dispatch_waybill.xml',
+        'report/waybill_item_report.xml',
+        'static/src/xml/customer_dashboard_templates.xml',
+    ],
+    'assets': {
+        'web.assets_backend': [
+            'warehousing_system/static/src/xml/warehouse_dashboard.xml',
+            'warehousing_system/static/src/js/warehouse_dashboard.js',
+            'warehousing_system/static/src/css/warehouse_dashboard_style.css',
+            'warehousing_system/static/src/js/many2x_autocomplete_patch.js',
+            # 'warehousing_system/static/src/xml/origin_autocomplete.xml',
+            # 'warehousing_system/static/src/js/origin_autocomplete.js',
+            # 'warehousing_system/static/src/css/origin_autocomplete.css',
+        ],
+    },
+    
+    'installable': True,
+    'auto_install': False,
+    'license': 'LGPL-3',
+}

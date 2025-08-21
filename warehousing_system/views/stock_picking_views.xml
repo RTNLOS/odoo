@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_picking_form_inherit_inventory" model="ir.ui.view">
+        <field name="name">stock.picking.form.inbound.memo.link</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+          <xpath expr="//sheet/group" position="after">
+            <group string="Shipment">
+              <field name="receiving_waybill_number"/>
+              <field name="bl_awb_number"/>
+            </group>
+          </xpath>
+          
+          <xpath expr="//field[@name='owner_id']" position="after">
+              <field name="dispatch_dest_location_id"/>
+          </xpath>
+          <!-- <xpath expr="//button[@name='button_validate'][1]" position="attributes">
+            <attribute name="invisible">state in ('draft', 'confirmed', 'done', 'cancel') or dispatch_dest_location_id != False </attribute>
+          </xpath>
+          <xpath expr="//button[@name='button_validate'][2]" position="attributes">
+            <attribute name="invisible">state in ('waiting', 'assigned', 'done', 'cancel') or dispatch_dest_location_id != False </attribute>
+          </xpath> -->
+           
+          <xpath expr="//button[@name='do_print_picking']" position="attributes">
+            <attribute name="invisible">state != 'assigned' or dispatch_dest_location_id != False </attribute>
+          </xpath>
+          <xpath expr="//button[@name='action_cancel']" position="attributes">
+            <attribute name="invisible">state not in ('assigned', 'confirmed', 'draft', 'waiting') or dispatch_dest_location_id != False </attribute>
+          </xpath>
+        </field>
+      </record>
+
+    <record id="view_picking_type_form_inherit_resequence" model="ir.ui.view">
+      <field name="name">stock.picking.type.form.resequence</field>
+      <field name="model">stock.picking.type</field>
+      <field name="inherit_id" ref="stock.view_picking_type_form"/>
+      <field name="arch" type="xml">
+          <xpath expr="/form" position="inside">
+              <div class="oe_button_box" name="button_box">
+                  <button name="action_resequence"
+                      type="object"
+                      class="oe_stat_button"
+                      icon="fa-sort-numeric-asc"
+                      groups="stock.group_stock_manager"
+                      confirm="Are you sure you want to re-sequence? This will find the highest existing transfer number and set the next number to continue from there.">
+                      <div class="o_field_widget o_stat_info">
+                          <span class="o_stat_text">Resequence</span>
+                      </div>
+                  </button>
+              </div>
+          </xpath>
+      </field>
+  </record>
+</odoo>

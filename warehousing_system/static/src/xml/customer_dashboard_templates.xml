@@ -1,0 +1,377 @@
+<odoo>
+    <data>
+
+            <template id="warehouse_layout" name="Warehouse Management System Layout">
+                <html>
+                    <head>
+                        <meta charset="utf-8"/>
+                        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+                        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+                        <meta name="generator" content="Odoo"/>
+                        <t t-out="head or ''"/>
+                        <title t-esc="title or 'Warehouse Management System'"/>
+                        <meta name="description" t-att-content="description or 'Warehouse Management System Dashboard'"/>
+                        <meta name="keywords" t-att-content="keywords or 'warehouse, management, inventory, logistics'"/>
+                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/css/bootstrap.min.css"/>
+                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+                        <link rel="stylesheet" href="/warehousing_system/static/src/css/warehouse_layout.css"/>
+                    </head>
+                    <body>
+                        <div class="warehouse-layout">
+                            <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+                            <nav class="sidebar" id="sidebar">
+                                <div class="sidebar-header">
+                                    <h4>Warehousing Menu</h4>
+                                </div>
+                                
+                                <ul class="sidebar-nav">
+                                    <li class="nav-item">
+                                        <a href="/warehouse/dashboard" t-att-class="'nav-link' + (' active' if current_page == 'dashboard' else '')">
+                                            <i class="fas fa-tachometer-alt"></i>
+                                            Dashboard
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+
+                            <div class="main-content" id="mainContent">
+                                <header class="main-header">
+                                    <div class="header-left">
+                                        <button class="sidebar-toggle" id="sidebarToggle">
+                                            <i class="fas fa-bars"></i>
+                                        </button>
+                                    </div>
+
+                                    <h1 class="header-title">
+                                        Red Transport Nigeria Warehouse Management System
+                                    </h1>
+                                    
+                                    <div class="header-right">
+                                        <div class="user-menu dropdown">
+                                            <t t-if="request.env.user.partner_id">
+                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <span class="user-name" t-esc="request.env.user.partner_id.name"/>
+                                                    
+                                                    <t t-if="request.env.user.partner_id.image_128">
+                                                        <img t-att-src="image_data_uri(request.env.user.partner_id.image_128)" class="user-avatar" alt="Avatar"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span class="user-avatar-fallback">
+                                                            <t t-esc="(request.env.user.partner_id.name or 'P')[0]"/>
+                                                        </span>
+                                                    </t>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a class="dropdown-item" href="/my/home">My Account</a>
+                                                    <div class="dropdown-divider"></div>
+                                                    <a class="dropdown-item" href="/web/session/logout?redirect=/">Sign Out</a>
+                                                </div>
+                                            </t>
+                                            <t t-else="">
+                                                <a class="dropdown-item" href="/web/session/logout?redirect=/">Sign Out</a>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </header>
+
+                                <div class="content-wrapper">
+                                    <div class="content-area">
+                                        <t t-out="0"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
+                        <script src="/warehousing_system/static/src/js/warehouse_layout.js"></script>
+                    </body>
+                </html>
+            </template>
+
+            <template id="customer_warehouse_dashboard_template" name="Customer Warehouse Dashboard Page">
+                <t t-call="warehousing_system.warehouse_layout">
+                    <head>
+                        <link
+                            rel="stylesheet"
+                            href="/warehousing_system/static/src/css/customer_dashboard.css"
+                        />
+                    </head>
+
+                    <div class="warehouse-dashboard-container">
+                        <!-- Main Content Container -->
+                        <div class="main-content-wrapper">
+                            <!-- Main Dashboard Content -->
+                            <div class="dashboard-content">
+                                <div class="container-fluid">
+                                    
+                                    <!-- Logo Section -->
+                                    <div class="logo-section">
+                                        <div class="logo-container">
+                                            <!-- Application Logo (Left side) -->
+                                            <img src="/warehousing_system/static/img/reddit_logo_v3.jpg" 
+                                                alt="Application Logo"
+                                                class="logo-image app-logo"/>
+                                            
+                                            <!-- Customer/Company Logo (Right side) -->
+                                            <t t-if="request.env.user.partner_id.parent_id and request.env.user.partner_id.parent_id.image_1920">
+                                                <img t-att-src="image_data_uri(request.env.user.partner_id.parent_id.image_1920)" 
+                                                    alt="Company Logo"
+                                                    class="logo-image company-logo"/>
+                                            </t>
+                                            <t t-elif="request.env.user.partner_id.image_1920">
+                                                <img t-att-src="image_data_uri(request.env.user.partner_id.image_1920)" 
+                                                    alt="Customer Logo"
+                                                    class="logo-image company-logo"/>
+                                            </t>
+                                            <t t-elif="request.env.company.logo">
+                                                <img t-att-src="image_data_uri(request.env.company.logo)" 
+                                                    alt="Company Logo"
+                                                    class="logo-image company-logo"/>
+                                            </t>
+                                        </div>
+                                    </div>
+
+                                    <!-- Dashboard Filters Section -->
+                                    <div class="dashboard-filters mb-4">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>Vessel</label>
+                                                <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    id="vessel-filter"
+                                                    placeholder="Search by Vessel"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Dashboard Cards -->
+                                    <div id="cards-container" class="dashboard-cards">
+                                        <div class="col-card">
+                                            <div class="warehouse-card red-card" data-category="totalInStock" data-title="Total Inventory Items in Stock">
+                                                <div class="card-icon"><i class="fa fa-info-circle"/></div>
+                                                <div class="card-count" id="count-totalInStock">0</div>
+                                                <div class="card-title">Total Inventory Items in Stock</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-card">
+                                            <div class="warehouse-card red-card" data-category="expectedToday" data-title="Inventory Items Expected Today">
+                                                <div class="card-icon"><i class="fa fa-calendar-check-o"></i></div>
+                                                <div class="card-count" id="count-expectedToday">0</div>
+                                                <div class="card-title">Inventory Items Expected Today</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-card">
+                                            <div class="warehouse-card red-card" data-category="expectedTomorrow" data-title="Inventory Items Expected Tomorrow">
+                                                <div class="card-icon"><i class="fa fa-calendar-plus-o"></i></div>
+                                                <div class="card-count" id="count-expectedTomorrow">0</div>
+                                                <div class="card-title">Inventory Items Expected Later</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-card">
+                                            <div class="warehouse-card red-card" data-category="pendingAllocation" data-title="Items Pending Storage Allocation">
+                                                <div class="card-icon"><i class="fa fa-cart-plus"/></div>
+                                                <div class="card-count" id="count-pendingAllocation">0</div>
+                                                <div class="card-title">Items Pending Storage Allocation</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-card">
+                                            <div class="warehouse-card red-card" data-category="labelsToBePrinted" data-title="Labels to be Printed">
+                                                <div class="card-icon"><i class="fa fa-print"/></div>
+                                                <div class="card-count" id="count-labelsToBePrinted">0</div>
+                                                <div class="card-title">Labels to be Printed</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-card">
+                                            <div class="warehouse-card red-card" data-category="dispatchedItems" data-title="Inventory Items Dispatched">
+                                                <div class="card-icon"><i class="fa fa-truck"/></div>
+                                                <div class="card-count" id="count-dispatchedItems">0</div>
+                                                <div class="card-title">Inventory Items to be Dispatched Today</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-card">
+                                            <div class="warehouse-card red-card" data-category="dispatchedItems" data-title="Inventory Items Dispatched">
+                                                <div class="card-icon"><i class="fa fa-truck"/></div>
+                                                <div class="card-count" id="count-dispatchedItems">0</div>
+                                                <div class="card-title">Inventory Items to be Dispatched Tomorrow</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-card">
+                                            <div class="warehouse-card red-card" data-category="longerThan90Days" data-title="Inventory Items >90 Days in Stock">
+                                                <div class="card-icon">
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 32 32"
+                                                        width="32"
+                                                        height="32"
+                                                        class="card-icon-img"
+                                                        data-icon-type="svg"
+                                                    >
+                                                        <path
+                                                            d="M0 0 C1.98 0 3.96 0 6 0 C6.33 0.99 6.66 1.98 7 3 C8.11375 2.95875 9.2275 2.9175 10.375 2.875 C14 3 14 3 16 5 C16.125 8.625 16.125 8.625 16 12 C16.99 12.33 17.98 12.66 19 13 C19 14.98 19 16.96 19 19 C18.01 19.33 17.02 19.66 16 20 C16.04125 21.11375 16.0825 22.2275 16.125 23.375 C16 27 16 27 14 29 C10.375 29.125 10.375 29.125 7 29 C6.67 29.99 6.34 30.98 6 32 C4.02 32 2.04 32 0 32 C-0.33 31.01 -0.66 30.02 -1 29 C-2.670625 29.061875 -2.670625 29.061875 -4.375 29.125 C-8 29 -8 29 -10 27 C-10.125 23.375 -10.125 23.375 -10 20 C-10.99 19.67 -11.98 19.34 -13 19 C-13 17.02 -13 15.04 -13 13 C-12.01 12.67 -11.02 12.34 -10 12 C-10.04125 10.88625 -10.0825 9.7725 -10.125 8.625 C-10 5 -10 5 -8 3 C-4.375 2.875 -4.375 2.875 -1 3 C-0.67 2.01 -0.34 1.02 0 0 Z M-3 10 C-5.06196218 12.2140989 -5.06196218 12.2140989 -6 15 C-5.23960803 18.80195984 -4.23036592 21.72677954 -1 24 C2.17695135 25.17045576 3.48883261 25.21907174 6.625 23.875 C9.34712589 21.72595325 10.72105706 20.23497332 12 17 C11.23960803 13.19804016 10.23036592 10.27322046 7 8 C2.67106404 6.40512886 0.56928197 7.18214581 -3 10 Z"
+                                                            fill="#C4001E"
+                                                            transform="translate(13,0)"
+                                                        />
+                                                        <path
+                                                            d="M0 0 C0.99 0.33 1.98 0.66 3 1 C3.33 3.64 3.66 6.28 4 9 C0.125 8.125 0.125 8.125 -1 7 C-1.125 4 -1.125 4 -1 1 C-0.67 0.67 -0.34 0.34 0 0 Z"
+                                                            fill="#C20019"
+                                                            transform="translate(15,10)"
+                                                        />
+                                                    </svg>
+                                                </div>
+                                                <div class="card-count" id="count-longerThan90Days">0</div>
+                                                <div class="card-title">Inventory Items longer than 90 Days in Stock</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-card">
+                                            <div class="warehouse-card red-card" data-category="criticalStockItems" data-title="Critical Items in Stock">
+                                                <div class="card-icon"><i class="fa fa-exclamation-triangle"/></div>
+                                                <div class="card-count" id="count-criticalStockItems">0</div>
+                                                <div class="card-title">Critical Items in Stock</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-card">
+                                            <div class="warehouse-card red-card" data-category="dangerousGoods" data-title="Dangerous Goods">
+                                                <div class="card-icon">
+                                                    <img
+                                                        src="/warehousing_system/static/img/danger.png"
+                                                        alt="Dangerous Goods"
+                                                        class="card-icon-img"
+                                                        data-icon-type="png"
+                                                        data-fallback-src="/warehousing_system/static/img/danger.png"
+                                                    />
+                                                </div>
+                                                <div class="card-count" id="count-dangerousGoods">0</div>
+                                                <div class="card-title">Dangerous Goods</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-card">
+                                            <div class="warehouse-card red-card" data-category="temperatureSensitive" data-title="Temperature Sensitive">
+                                                <div class="card-icon"><i class="fa fa-thermometer-half"/></div>
+                                                <div class="card-count" id="count-temperatureSensitive">0</div>
+                                                <div class="card-title">Temperature Sensitive</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-card">
+                                            <div class="warehouse-card red-card" data-category="openOSDInventory" data-title="Open OS&amp;D Inventory in Stock">
+                                                <div class="card-icon"><i class="fa fa-unlock-alt"/></div>
+                                                <div class="card-count" id="count-openOSDInventory">0</div>
+                                                <div class="card-title">Open OS&amp;D Inventory in Stock</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- UTILIZATION CARDS -->
+                                        <div class="col-card">
+                                            <div class="warehouse-card blue-card" data-category="mainWarehouseUtilization" data-title="MainWarehouse Utilization">
+                                                <div class="card-icon">
+                                                    <img
+                                                        src="/warehousing_system/static/img/space-utilization.png"
+                                                        alt="Main Warehouse utilization"
+                                                        class="card-icon-img"
+                                                        data-icon-type="png"
+                                                        data-fallback-src="/warehousing_system/static/img/space-utilization.png"
+                                                    />
+                                                </div>
+                                                <div class="card-count" id="count-mainWarehouseUtilization">0.00 m²</div>
+                                                <div class="card-title">Main Warehouse Utilization</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-card">
+                                            <div class="warehouse-card blue-card" data-category="bondedWarehouseUtilization" data-title="BondedWarehouse Utilization">
+                                                <div class="card-icon">
+                                                    <img
+                                                        src="/warehousing_system/static/img/space-utilization.png"
+                                                        alt="Bonded Warehouse Utilization"
+                                                        class="card-icon-img"
+                                                        data-icon-type="png"
+                                                        data-fallback-src="/warehousing_system/static/img/space-utilization.png"
+                                                    />
+                                                </div>
+                                                <div class="card-count" id="count-bondedWarehouseUtilization">0.00 m²</div>
+                                                <div class="card-title">Bonded Warehouse Utilization</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-card">
+                                            <div class="warehouse-card blue-card" data-category="coveredStackingUtilization" data-title="CoveredStacking Utilization">
+                                                <div class="card-icon">
+                                                    <img
+                                                        src="/warehousing_system/static/img/space-utilization.png"
+                                                        alt="Covered Stacking utilization"
+                                                        class="card-icon-img"
+                                                        data-icon-type="png"
+                                                        data-fallback-src="/warehousing_system/static/img/space-utilization.png"
+                                                    />
+                                                </div>
+                                                <div class="card-count" id="count-coveredStackingUtilization">0.00 m²</div>
+                                                <div class="card-title">Covered Stacking Utilization</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-card">
+                                            <div class="warehouse-card blue-card" data-category="openStackingUtilization" data-title="OpenStacking Utilization">
+                                                <div class="card-icon">
+                                                    <img
+                                                        src="/warehousing_system/static/img/space-utilization.png"
+                                                        alt="Open Stacking Utilization"
+                                                        class="card-icon-img"
+                                                        data-icon-type="png"
+                                                        data-fallback-src="/warehousing_system/static/img/space-utilization.png"
+                                                    />
+                                                </div>
+                                                <div class="card-count" id="count-openStackingUtilization">0.00 m²</div>
+                                                <div class="card-title">Open Stacking Utilization</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <script
+                                        type="module"
+                                        src="/warehousing_system/static/src/js/customer_dashboard.js"
+                                    ></script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </template>
+
+            <!-- Inventory Template -->
+            <template id="customer_warehouse_detail_template" name="Warehouse Dashboard Detail List">
+                <t t-call="warehousing_system.warehouse_layout">
+                    <div class="container-fluid mt-4">
+                        <h2 class="mb-3">
+                            <t t-esc="title"/>
+                        </h2>
+                        <a class="btn btn-secondary mb-3" href="/warehouse/dashboard">
+                            ← Back to Dashboard
+                        </a>
+                        <div t-if="not records">
+                            <div class="alert alert-info">No records found.</div>
+                        </div>
+                        <div t-else="">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th t-foreach="headers" t-as="header">
+                                            <t t-esc="header['label']"/>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="records" t-as="rec">
+                                        <td t-foreach="headers" t-as="header">
+                                            <t t-esc="rec.get(header['key'], '')"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </t>
+            </template>
+    
+    </data>
+    
+</odoo>

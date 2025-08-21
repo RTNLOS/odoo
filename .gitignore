@@ -1,0 +1,8 @@
+# Ignore all __pycache__ folders and Python bytecode
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+warehousing_system/tests/
+warehousing_system/.idea/
+*.iml
