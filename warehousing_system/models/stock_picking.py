@@ -150,3 +150,6 @@ class StockReturnPicking(models.TransientModel):
         for r in picking_id.move_ids_without_package:
             r.state = "draft"
         return res
+
+
+        
